@@ -11,12 +11,13 @@ import {
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
 
-import { Product, Store, User } from "../../Lib/Types";
+import { Category, Product, Store, User } from "../../Lib/Types";
 
 import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
 import {
+  GetCategoriesResponse,
   GetProductsResponse,
   GetUserStoreResponse,
   LoginResponse,
@@ -35,6 +36,7 @@ interface FetchProductProps {
 }
 interface AppContextProps {
   user: User | null;
+  categories: Category[] | [];
   products: Product[] | [];
   productCount: number;
   getProducts?: ({ page, limit }: FetchProductProps) => void;
@@ -45,6 +47,7 @@ export default function DashboardContainer() {
   const navigate = useNavigate();
   const { addToast, removeAllToasts } = useToasts();
   const [user, setUser] = useState<User | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
 
@@ -70,16 +73,30 @@ export default function DashboardContainer() {
       data: { token: token, page: page, limit: limit },
     });
     console.log(r);
-    if (r.data && r.data.data) {
-      setProducts(r.data.data);
-      setProductCount(r.data.counts);
+    if (r.data && r.data.status === "success") {
+      setProducts(r.data.data ?? []);
+      setProductCount(r.data.counts ?? 0);
     } else {
+      addToast(r.data.message, { appearance: "error" });
+    }
+  };
+  const getCategories = async () => {
+    const token = Cookies.get("token");
+    const r: GetCategoriesResponse = await PerformRequest({
+      route: Endpoints.GetProductCategory,
+      method: "POST",
+      data: { token: token },
+    });
+    console.log(r);
+    if (r.data && r.data.status === "success") {
+      setCategories(r.data.data ?? []);
     }
   };
 
   useEffect(() => {
     getUser();
-    getProducts({ page: 1, limit: 20 });
+    getCategories();
+    getProducts({ page: 1, limit: 15 });
   }, []);
 
   const logout = () => {
@@ -91,6 +108,7 @@ export default function DashboardContainer() {
     <AppContext.Provider
       value={{
         user: user,
+        categories: categories,
         logout: logout,
         products: products,
         getProducts: getProducts,

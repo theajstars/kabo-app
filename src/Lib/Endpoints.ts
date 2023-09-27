@@ -1,15 +1,10 @@
 const Endpoints = {
-  LoginUser: "/account/login",
-  GetUserDetails: "/account/details",
-
   CreateStore: "/store/create",
   GetStoreList: "/store/list",
   GetUserStore: "/store/details",
 
-  GetProducts: "/store/products",
   CreateNewProduct: "/store/add-product",
 
-  GetProductCategory: "/store/category",
   GetSubCategory: "/store/sub-category",
 
   GetOrders: "/order/details",
@@ -20,7 +15,11 @@ const Endpoints = {
   UploadFile: "/misc/file-upload",
 
   RegisterUser: "/account/register",
+  LoginUser: "/account/login",
+  GetUserDetails: "/account/details",
 
+  GetProducts: "/store/products",
   SearchStores: "/store/search",
+  GetProductCategory: "/store/category",
 };
 export { Endpoints };
