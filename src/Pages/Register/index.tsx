@@ -20,16 +20,10 @@ interface UserFormValuesProps {
   password: string;
   phone: string;
   username: string;
-  lastName: string;
-  firstName: string;
   referralCode?: string;
   showPassword: boolean;
 }
-interface StoreFormValuesProps {
-  name: string;
-  email: string;
-  phone: string;
-}
+
 export default function Register() {
   const navigate = useNavigate();
   const { addToast, removeAllToasts } = useToasts();
@@ -39,70 +33,44 @@ export default function Register() {
     password: "",
     phone: "",
     username: "",
-    lastName: "",
-    firstName: "",
     showPassword: false,
   });
-  const [storeFormValues, setStoreFormValues] = useState<StoreFormValuesProps>({
-    name: "",
-    phone: "",
-    email: "",
-  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     removeAllToasts();
     e.preventDefault();
     console.log(userFormValues);
-    console.log(storeFormValues);
-    const {
-      email: userEmail,
-      password,
-      phone: userPhone,
-      username,
-      lastName,
-      firstName,
-    } = userFormValues;
-    const { name, phone: storePhone, email: storeEmail } = storeFormValues;
-    const isUserEmailValid = validateEmail(userEmail);
-    const isStoreEmailValid = validateEmail(storeEmail);
+    const { username, email, phone, password, referralCode } = userFormValues;
+    const isEmailValid = validateEmail(email);
 
     if (
-      password.length === 0 ||
-      userPhone.length !== 11 ||
       username.length === 0 ||
-      lastName.length === 0 ||
-      firstName.length === 0 ||
-      name.length === 0 ||
-      storePhone.length !== 11 ||
-      !isUserEmailValid ||
-      !isStoreEmailValid
+      password.length === 0 ||
+      phone.length !== 11 ||
+      !isEmailValid
     ) {
       addToast("Please fill the form correctly!", { appearance: "error" });
     } else {
       setLoading(true);
       const r: DefaultResponse = await PerformRequest({
         method: "POST",
-        route: Endpoints.CreateStore,
+        route: Endpoints.RegisterUser,
         data: {
-          name,
-          phone: storePhone,
-          email: storeEmail,
-          personal: {
-            lastname: lastName,
-            othernames: firstName,
-            username,
-            email: userEmail,
-            phone: userPhone,
-            passcode: password,
-          },
+          username,
+          email,
+          phone,
+          passcode: password,
+          referral_code: referralCode,
         },
       }).catch(() => {
         setLoading(false);
       });
+      console.log(r);
       setLoading(false);
       if (r.data && r.data.status) {
         const { status } = r.data;
         if (status === "success") {
-          addToast("Store Created!", { appearance: "success" });
+          addToast("Account Created!", { appearance: "success" });
           navigate("/login");
         } else {
           addToast(r.data.message, { appearance: "error" });
@@ -133,7 +101,7 @@ export default function Register() {
                 onChange={(e) =>
                   setUserFormValues({
                     ...userFormValues,
-                    firstName: e.target.value,
+                    username: e.target.value,
                   })
                 }
               />
