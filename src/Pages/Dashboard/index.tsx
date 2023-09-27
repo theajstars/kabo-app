@@ -16,6 +16,7 @@ import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
 import MegaLoader from "../../Misc/MegaLoader";
 import { AppContext } from "../DashboardContainer";
+import ProductCard from "../ProductCard";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container flex-col width-100">
+      <ProductCard />
       {userContext?.user ? (
         <>
           <img src={Logo} alt="" className="logo" />
