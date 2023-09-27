@@ -11,23 +11,27 @@ import {
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
 
-import { Store, User } from "../../Lib/Types";
+import { Product, Store, User } from "../../Lib/Types";
 
 import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
-import { GetUserStoreResponse, LoginResponse } from "../../Lib/Responses";
+import {
+  GetProductsResponse,
+  GetUserStoreResponse,
+  LoginResponse,
+} from "../../Lib/Responses";
 import MegaLoader from "../../Misc/MegaLoader";
 import Products from "../Products";
 import Dashboard from "../Dashboard";
 import Navbar from "../Navbar";
-import NewProduct from "../NewProduct";
+
 import Orders from "../Orders";
 import Team from "../Team";
 
 interface AppContextProps {
   user: User | null;
-  store: Store | null;
+  products: Product[] | [];
   logout: () => void;
 }
 const AppContext = createContext<AppContextProps | null>(null);
@@ -35,6 +39,7 @@ export default function DashboardContainer() {
   const navigate = useNavigate();
   const { addToast, removeAllToasts } = useToasts();
   const [user, setUser] = useState<User | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
   const [userStore, setUserStore] = useState<Store | null>(null);
 
   const getUser = async () => {
@@ -51,24 +56,23 @@ export default function DashboardContainer() {
       navigate("/login");
     }
   };
-  const getUserStore = async () => {
+  const getProducts = async () => {
     const token = Cookies.get("token");
-    const r: GetUserStoreResponse = await PerformRequest({
+    const r: GetProductsResponse = await PerformRequest({
+      route: Endpoints.GetProducts,
       method: "POST",
-      route: Endpoints.GetUserStore,
-      data: { token, store_id: Cookies.get("user_store_id") },
+      data: { token: token },
     });
     console.log(r);
-
     if (r.data && r.data.data) {
-      if (r.data.status === "success") {
-        setUserStore(r.data.data);
-      }
+      setProducts(r.data.data);
+    } else {
     }
   };
+
   useEffect(() => {
     getUser();
-    getUserStore();
+    getProducts();
   }, []);
 
   const logout = () => {
@@ -78,7 +82,7 @@ export default function DashboardContainer() {
   };
   return (
     <AppContext.Provider
-      value={{ user: user, logout: logout, store: userStore }}
+      value={{ user: user, logout: logout, products: products }}
     >
       <Navbar />
       <Routes>
@@ -86,7 +90,6 @@ export default function DashboardContainer() {
         <Route path="/products" element={<Products />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/team" element={<Team />} />
-        <Route path="/new-product" element={<NewProduct />} />
       </Routes>
     </AppContext.Provider>
   );

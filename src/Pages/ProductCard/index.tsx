@@ -1,22 +1,30 @@
 import { useState, useEffect, useContext } from "react";
 import { useToasts } from "react-toast-notifications";
 
-import DefaultImage from "../../Assets/IMG/beans.jpg";
+import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
+import { Product } from "../../Lib/Types";
 
 import "./styles.scss";
 
-export default function ProductCard() {
+interface ProductCardProps {
+  product: Product;
+}
+export default function ProductCard({ product }: ProductCardProps) {
   const { addToast, removeAllToasts } = useToasts();
 
-  const product = {
-    name: "Bean Chilli Pilly Bean Chilli dilly",
-    store: "Store Braavo",
+  const getProductImage = () => {
+    const { main_photo } = product;
+    if (main_photo) {
+      if (main_photo.length > 0) {
+        return main_photo;
+      }
+      return DefaultImage;
+    }
+    return DefaultImage;
   };
-  console.log(product.name.length);
-  console.log(product.store.length);
   return (
     <div className="product-card-container flex-col align-center justify-between">
-      <img src={DefaultImage} alt="" className="image" />
+      <img src={getProductImage()} alt="" className="image" />
       <span
         className={`product-name width-100 align-start flex-row ${
           product.name.length > 30 ? "px-13" : "px-15"
@@ -39,9 +47,11 @@ export default function ProductCard() {
           <i className="far fa-store" />
         </span>
         <span
-          className={`name ${product.store.length > 15 ? "px-10" : "px-15"}`}
+          className={`name capitalize ${
+            product.store_name.length > 15 ? "px-10" : "px-15"
+          }`}
         >
-          {product.store}
+          {product.store_name}
         </span>
       </div>
     </div>
