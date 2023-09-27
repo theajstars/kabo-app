@@ -20,5 +20,7 @@ const Endpoints = {
   UploadFile: "/misc/file-upload",
 
   RegisterUser: "/account/register",
+
+  SearchStores: "/store/search",
 };
 export { Endpoints };

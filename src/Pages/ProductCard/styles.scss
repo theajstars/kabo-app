@@ -8,6 +8,7 @@
   box-sizing: border-box;
   padding: 30px 45px;
   padding-bottom: 0px;
+  border: 1px solid #5d5fef23;
   .image {
     width: 100%;
     object-fit: contain;
@@ -61,5 +62,13 @@
     &:hover {
       background-color: $BlueDefault;
     }
+  }
+  @media screen and (max-width: 640px) {
+    // & {
+    //   width: 60vw;
+    //   .image {
+    //     width: 100px;
+    //   }
+    // }
   }
 }

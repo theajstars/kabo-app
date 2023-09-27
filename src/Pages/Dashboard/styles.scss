@@ -8,6 +8,22 @@
   .logo {
     height: 100px;
   }
+  .search {
+    width: 90vw;
+    max-width: 400px;
+    .input {
+      width: -webkit-fill-available;
+      height: 32px;
+      padding: 0 20px;
+      box-sizing: border-box;
+      outline: none;
+      border: 1px solid $BlueDefault;
+      border-radius: 5px;
+    }
+    .input-error {
+      border-color: $RedPrimary;
+    }
+  }
   .profile {
     height: 60px;
     background-color: #fff;

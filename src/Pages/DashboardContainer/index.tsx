@@ -29,9 +29,15 @@ import Navbar from "../Navbar";
 import Orders from "../Orders";
 import Team from "../Team";
 
+interface FetchProductProps {
+  page: number;
+  limit: number;
+}
 interface AppContextProps {
   user: User | null;
   products: Product[] | [];
+  productCount: number;
+  getProducts?: ({ page, limit }: FetchProductProps) => void;
   logout: () => void;
 }
 const AppContext = createContext<AppContextProps | null>(null);
@@ -40,7 +46,7 @@ export default function DashboardContainer() {
   const { addToast, removeAllToasts } = useToasts();
   const [user, setUser] = useState<User | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [userStore, setUserStore] = useState<Store | null>(null);
+  const [productCount, setProductCount] = useState<number>(0);
 
   const getUser = async () => {
     const token = Cookies.get("token");
@@ -56,23 +62,24 @@ export default function DashboardContainer() {
       navigate("/login");
     }
   };
-  const getProducts = async () => {
+  const getProducts = async ({ page, limit }: FetchProductProps) => {
     const token = Cookies.get("token");
     const r: GetProductsResponse = await PerformRequest({
       route: Endpoints.GetProducts,
       method: "POST",
-      data: { token: token },
+      data: { token: token, page: page, limit: limit },
     });
     console.log(r);
     if (r.data && r.data.data) {
       setProducts(r.data.data);
+      setProductCount(r.data.counts);
     } else {
     }
   };
 
   useEffect(() => {
     getUser();
-    getProducts();
+    getProducts({ page: 1, limit: 20 });
   }, []);
 
   const logout = () => {
@@ -82,7 +89,13 @@ export default function DashboardContainer() {
   };
   return (
     <AppContext.Provider
-      value={{ user: user, logout: logout, products: products }}
+      value={{
+        user: user,
+        logout: logout,
+        products: products,
+        getProducts: getProducts,
+        productCount: productCount,
+      }}
     >
       <Navbar />
       <Routes>
