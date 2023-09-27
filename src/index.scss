@@ -1,0 +1,55 @@
+@import "./Fonts.scss";
+@import "./Variables.scss";
+// Poppins Font
+body {
+  margin: 0 auto;
+  padding: 0 auto;
+  background-color: $WhitePrimary;
+}
+* {
+  font-family: "Poppins", sans-serif;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.width-100 {
+  width: 100%;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.align-center {
+  align-items: center;
+}
+.align-start {
+  align-items: flex-start;
+}
+.align-end {
+  align-items: flex-end;
+}
+.pointer {
+  cursor: pointer;
+}
+.display-none {
+  display: none !important;
+}
+a {
+  text-decoration: none !important;
+}
+.text-center {
+  text-align: center;
+}
+.capitalize {
+  text-transform: capitalize;
+}

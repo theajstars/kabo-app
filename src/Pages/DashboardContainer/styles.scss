@@ -1,0 +1,61 @@
+@import "../../Variables.scss";
+
+.dashboard-container {
+  align-items: center;
+  justify-content: center;
+
+  .logo {
+    height: 100px;
+  }
+  .profile {
+    height: 60px;
+    background-color: #fff;
+    max-width: 800px;
+    margin-bottom: 30px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    .item {
+      .icon {
+        margin-right: 10px;
+      }
+    }
+  }
+  .menu {
+    width: 100%;
+    max-width: 800px;
+    justify-content: space-between;
+    .item {
+      border: 1px solid $BluePrimary;
+      padding: 0;
+      padding-top: 20px;
+      box-sizing: border-box;
+      height: 330px;
+      width: 330px;
+      border-radius: 10px;
+      img {
+        height: 90px;
+      }
+      .details {
+        padding: 20px;
+        box-sizing: border-box;
+        height: 200px;
+        justify-content: space-between;
+        button {
+          width: 100%;
+          cursor: pointer;
+          background-color: $BluePrimary;
+          color: $WhitePrimary;
+          height: 35px;
+          outline: none;
+          border: none;
+          transition-duration: 0.12s;
+          border-radius: 7px;
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+      }
+    }
+  }
+}

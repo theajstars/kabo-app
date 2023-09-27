@@ -1,0 +1,44 @@
+@import "../../Variables.scss";
+
+.team-container {
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  .top {
+    box-sizing: border-box;
+    padding: 30px;
+    padding-bottom: 0px;
+  }
+  .table {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+  }
+}
+.add-team {
+  width: 400px;
+  background-color: $WhitePrimary;
+  height: 250px;
+  position: fixed;
+  margin-left: -200px;
+  margin-top: -125px;
+  top: 50%;
+  left: 50%;
+  border-radius: 10px;
+  box-sizing: border-box;
+  .header {
+    border-radius: 10px 10px 0 0;
+    background-color: $BluePrimary;
+    color: $WhitePrimary;
+    height: 40px;
+    box-sizing: border-box;
+  }
+  .body {
+    width: 100%;
+    padding: 27px 20px;
+    box-sizing: border-box;
+  }
+}
+.css-5wly58-MuiDataGrid-root {
+  border: none !important;
+}

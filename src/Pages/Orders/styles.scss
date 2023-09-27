@@ -1,0 +1,39 @@
+@import "../../Variables.scss";
+
+.orders-container {
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  .top {
+    box-sizing: border-box;
+    padding: 30px;
+    padding-bottom: 0px;
+    .filter {
+      .filter-select {
+        margin-right: 5px !important;
+      }
+      @media screen and (max-width: 550px) {
+        & {
+          flex-direction: column;
+          align-items: flex-start;
+          .filter-select {
+            margin-bottom: 10px !important;
+          }
+        }
+      }
+      @media screen and (max-width: 390px) {
+        .filter-select {
+          width: 82vw !important;
+        }
+      }
+    }
+  }
+  .table {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+  }
+}
+.css-5wly58-MuiDataGrid-root {
+  border: none !important;
+}

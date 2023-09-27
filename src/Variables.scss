@@ -1,0 +1,58 @@
+$PurpleDefault: #5d5fef;
+$PurpleLight: #f3e8ff;
+
+$DarkDefault: #151d48;
+$DarkSecondary: #425166;
+
+$GrayDefault: #737791;
+
+$White: #fff;
+$WhitePrimary: #f9fafb;
+
+$BlueDefault: #4079ed;
+$BluePrimary: #061770;
+
+$OrangeLight: #fffaf1;
+$OrangePrimary: #ffa412;
+
+$YellowLight: #fff4de;
+
+$RedLight: #ffe2e5;
+$RedPrimary: #ff3300;
+
+$GreenLight: #dcfce7;
+$GreenPrimary: #037c50;
+
+.text-dark {
+  color: $DarkDefault;
+}
+.text-dark-secondary {
+  color: $DarkSecondary;
+}
+
+.text-blue-default {
+  color: $BlueDefault;
+}
+.text-purple {
+  color: $PurpleDefault;
+}
+
+.text-orange-light {
+  color: $OrangeLight;
+}
+.text-orange-primary {
+  color: $OrangePrimary;
+}
+.text-gray {
+  color: $GrayDefault;
+}
+.text-white {
+  color: $White;
+}
+
+.text-green-primary {
+  color: $GreenPrimary;
+}
+.text-red-primary {
+  color: $RedPrimary;
+}

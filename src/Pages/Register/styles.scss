@@ -1,0 +1,20 @@
+@import "../../Variables.scss";
+
+.register-container {
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 50px 0;
+  .content {
+    max-width: 500px;
+    box-shadow: 0px 2px 10px 0px rgba(58, 53, 65, 0.1);
+    width: 90vw;
+    box-sizing: border-box;
+    padding: 0 20px;
+    border-radius: 10px;
+  }
+  .logo {
+    width: 150px;
+    object-fit: contain;
+  }
+}
