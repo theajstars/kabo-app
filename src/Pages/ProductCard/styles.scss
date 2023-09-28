@@ -98,8 +98,13 @@
         height: 37px;
         border-radius: 50%;
         transition-duration: 0.12s;
-        &:hover {
+        border: none;
+        outline: none;
+        &:not(:disabled):hover {
           background-color: rgba(185, 185, 185, 0.496);
+        }
+        &:disabled {
+          cursor: not-allowed;
         }
       }
       .amount {

@@ -24,5 +24,7 @@ const Endpoints = {
 
   GetUserCart: "/order/cart",
   AddProductToCart: "/order/add",
+  RemoveProductFromCart: "/order/remove",
+  UpdateCart: "/order/update",
 };
 export { Endpoints };

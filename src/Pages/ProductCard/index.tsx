@@ -24,6 +24,9 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
   const userContext = useContext(AppContext);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
+
+  const [isLoading, setLoading] = useState<boolean>(false);
+
   const getProductImage = () => {
     const { main_photo } = product;
     if (main_photo) {
@@ -35,9 +38,22 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
     return DefaultImage;
   };
 
+  const getProductInCart = () => {
+    const cartProducts = userContext?.cart?.product;
+    const findInCart = cartProducts?.filter((p) => p.id === product.id);
+    const noInCart = findInCart
+      ? findInCart.length > 0
+        ? findInCart[0]?.quantity ?? 0
+        : 0
+      : 0;
+    return parseInt(noInCart.toString());
+  };
+
   const AddProductToCart = async () => {
     console.log(product);
+    removeAllToasts();
     const token = Cookies.get("token");
+    setLoading(true);
     const r: DefaultResponse = await PerformRequest({
       route: Endpoints.AddProductToCart,
       method: "POST",
@@ -46,9 +62,39 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
         id: product.id,
         quantity: 1,
       },
-    });
+    }).catch(() => [setLoading(false)]);
+    setLoading(false);
     if (r && r.data.status === "success") {
       addToast("Product Added", { appearance: "success" });
+      if (userContext && userContext.reloadCart) {
+        userContext.reloadCart();
+      }
+    } else {
+      addToast(r.data.message, { appearance: "error" });
+    }
+  };
+  const RemoveProductFromCart = async () => {
+    console.log(product);
+    removeAllToasts();
+    setLoading(true);
+
+    const token = Cookies.get("token");
+    const poid = userContext?.cart?.product?.filter(
+      (p) => p.id === product.id
+    )[0].poid;
+    const r: DefaultResponse = await PerformRequest({
+      route: Endpoints.UpdateCart,
+      method: "POST",
+      data: {
+        token,
+        poid: [poid],
+        quantity: getProductInCart() === 1 ? [0] : [getProductInCart() - 1],
+      },
+    }).catch(() => [setLoading(false)]);
+    setLoading(false);
+
+    if (r && r.data.status === "success") {
+      addToast("Product Removed", { appearance: "success" });
       if (userContext && userContext.reloadCart) {
         userContext.reloadCart();
       }
@@ -137,16 +183,21 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
           </div>
           <div className="flex-row width-100 align-start justify-between body">
             <div className="flex-col toggle-cart align-center">
-              <span
+              <button
+                disabled={isLoading}
                 className="action flex-row align-center justify-center pointer"
                 onClick={() => AddProductToCart()}
               >
                 <i className="far fa-plus" />
-              </span>
-              <span className="px-19 fw-600 amount">0</span>
-              <span className="action flex-row align-center justify-center pointer">
+              </button>
+              <span className="px-19 fw-600 amount">{getProductInCart()}</span>
+              <button
+                disabled={isLoading || getProductInCart() === 0}
+                className="action flex-row align-center justify-center pointer"
+                onClick={() => RemoveProductFromCart()}
+              >
                 <i className="far fa-minus" />
-              </span>
+              </button>
             </div>
             &nbsp; &nbsp;
             <span className="description">{product.details}</span>
