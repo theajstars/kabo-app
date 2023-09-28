@@ -11,7 +11,13 @@ import {
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
 
-import { Cart, Category, Product, Store, User } from "../../Lib/Types";
+import {
+  Cart as CartType,
+  Category,
+  Product,
+  Store,
+  User,
+} from "../../Lib/Types";
 
 import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
@@ -29,6 +35,7 @@ import Navbar from "../Navbar";
 
 import Orders from "../Orders";
 import Team from "../Team";
+import Cart from "../Cart";
 
 interface FetchProductProps {
   page: number;
@@ -37,7 +44,7 @@ interface FetchProductProps {
 }
 interface AppContextProps {
   user: User | null;
-  cart: Cart | null;
+  cart: CartType | null;
   categories: Category[] | [];
   products: Product[] | [];
   productCount: number;
@@ -50,7 +57,7 @@ export default function DashboardContainer() {
   const navigate = useNavigate();
   const { addToast, removeAllToasts } = useToasts();
   const [user, setUser] = useState<User | null>(null);
-  const [cart, setCart] = useState<Cart | null>(null);
+  const [cart, setCart] = useState<CartType | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
@@ -149,6 +156,7 @@ export default function DashboardContainer() {
         <Route path="/products" element={<Products />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/team" element={<Team />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </AppContext.Provider>
   );

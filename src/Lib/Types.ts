@@ -95,6 +95,7 @@ export interface SimpleProduct {
   name: string;
   quantity: string;
   amount: string;
+  main_photo: string;
   vat: string;
   details: string;
 }

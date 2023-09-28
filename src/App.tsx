@@ -10,6 +10,7 @@ import Products from "./Pages/Products";
 import DashboardContainer from "./Pages/DashboardContainer";
 import Orders from "./Pages/Orders";
 import Team from "./Pages/Team";
+import Cart from "./Pages/Cart";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/dashboard/products" element={<Products />} />
             <Route path="/dashboard/orders" element={<Orders />} />
-            <Route path="/dashboard/team" element={<Team />} />
+            <Route path="/dashboard/cart" element={<Cart />} />
           </Route>
         </Routes>
       </Router>
