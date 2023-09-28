@@ -33,6 +33,7 @@ import Team from "../Team";
 interface FetchProductProps {
   page: number;
   limit: number;
+  category_id?: string;
 }
 interface AppContextProps {
   user: User | null;
@@ -65,12 +66,21 @@ export default function DashboardContainer() {
       navigate("/login");
     }
   };
-  const getProducts = async ({ page, limit }: FetchProductProps) => {
+  const getProducts = async ({
+    page,
+    limit,
+    category_id,
+  }: FetchProductProps) => {
     const token = Cookies.get("token");
     const r: GetProductsResponse = await PerformRequest({
       route: Endpoints.GetProducts,
       method: "POST",
-      data: { token: token, page: page, limit: limit },
+      data: {
+        token: token,
+        page: page,
+        limit: limit,
+        category_id: category_id ?? "",
+      },
     });
     console.log(r);
     if (r.data && r.data.status === "success") {

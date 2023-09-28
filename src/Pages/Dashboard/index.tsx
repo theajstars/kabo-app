@@ -33,7 +33,11 @@ export default function Dashboard() {
   const paginateProducts = async () => {
     if (userContext && userContext.getProducts) {
       setLoading(true);
-      await userContext.getProducts({ page, limit: 15 });
+      await userContext.getProducts({
+        page,
+        limit: 15,
+        category_id: productCategory,
+      });
       setLoading(false);
     }
   };
@@ -45,6 +49,20 @@ export default function Dashboard() {
   useEffect(() => {
     paginateProducts();
   }, [page]);
+  const getProductByCategory = async () => {
+    if (userContext && userContext.getProducts) {
+      setLoading(true);
+      await userContext.getProducts({
+        page,
+        limit: 15,
+        category_id: productCategory,
+      });
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getProductByCategory();
+  }, [productCategory]);
 
   const searchProducts = async () => {
     const token = Cookies.get("token");
