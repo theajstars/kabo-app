@@ -173,10 +173,36 @@ export default function ProductCard({
       }
     }
   };
+
+  const DeleteProductFromCart = async () => {
+    removeAllToasts();
+    setLoading(true);
+
+    const token = Cookies.get("token");
+    const poid = cartProduct?.poid;
+    const r: DefaultResponse = await PerformRequest({
+      route: Endpoints.RemoveProductFromCart,
+      method: "POST",
+      data: {
+        token,
+        poid: [poid],
+      },
+    }).catch(() => [setLoading(false)]);
+    setLoading(false);
+
+    if (r && r.data.status === "success") {
+      addToast("Product Removed", { appearance: "success" });
+      if (userContext && userContext.reloadCart) {
+        userContext.reloadCart();
+      }
+    } else {
+      addToast(r.data.message, { appearance: "error" });
+    }
+  };
   return (
     <>
       {isCartProduct ? (
-        <div className="product flex-row align-start justify-between">
+        <div className="cart-product flex-row align-start justify-between">
           {cartProduct && (
             <>
               <img src={cartProduct.main_photo} alt="" className="image" />
@@ -188,26 +214,38 @@ export default function ProductCard({
                   ₦{getFinancialValueFromNumeric(cartProduct.amount)}
                 </span>
                 <div className="flex-row align-center width-100 justify-between actions">
-                  <span
+                  <button
+                    disabled={isLoading}
                     className="action flex-row align-center justify-center"
                     onClick={() => RemoveProductFromCart()}
                   >
                     <i className="far fa-minus" />
-                  </span>
-                  <span className="quantity px-16 fw-600 text-dark">
+                  </button>
+                  <span
+                    className="quantity px-16 fw-600 text-dark"
+                    style={{
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                  >
                     {cartProduct.quantity}
                   </span>
-                  <span
+                  <button
+                    disabled={isLoading}
                     className="action flex-row align-center justify-center"
                     onClick={() => AddProductToCart()}
                   >
                     <i className="far fa-plus" />
-                  </span>
+                  </button>
                 </div>
               </div>
             </>
           )}
-          <i className="far fa-times pointer text-gray" />
+          <i
+            className="far fa-times pointer text-gray"
+            onClick={() => {
+              DeleteProductFromCart();
+            }}
+          />
         </div>
       ) : (
         <div className="product-card-container flex-col align-center justify-between">
@@ -297,7 +335,12 @@ export default function ProductCard({
                   >
                     <i className="far fa-plus" />
                   </button>
-                  <span className="px-19 fw-600 amount">
+                  <span
+                    className="px-19 fw-600 amount"
+                    style={{
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                  >
                     {getProductInCart()}
                   </span>
                   <button

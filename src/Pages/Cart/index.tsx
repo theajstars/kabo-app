@@ -75,9 +75,12 @@ export default function Cart() {
               })}
             </div>
           ) : (
-            <Alert severity="info">
-              Please add some items to your cart to checkout
-            </Alert>
+            <>
+              <br />
+              <Alert severity="info">
+                Please add some items to your cart to checkout
+              </Alert>
+            </>
           )}
         </div>
       )}

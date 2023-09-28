@@ -1,5 +1,5 @@
 const RouteList = [
-  { label: "Products", route: "products" },
+  { label: "Stores", route: "stores" },
   { label: "Orders", route: "orders" },
   { label: "Cart", route: "cart" },
 ];
