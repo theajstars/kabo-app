@@ -27,6 +27,8 @@ export default function Navbar() {
   const userContext = useContext(AppContext);
 
   const screenWidth = window.innerWidth;
+  const cartProducts = userContext?.cart;
+
   return (
     <>
       {screenWidth > 700 ? (
@@ -36,6 +38,21 @@ export default function Navbar() {
               <img src={Logo} alt="" />
             </Link>
             {RouteList.map((route) => {
+              if (route.route === "cart") {
+                return (
+                  <>
+                    <Link
+                      className="item text-blue-default"
+                      to={`/dashboard/${route.route}`}
+                    >
+                      {route.label}
+                    </Link>
+                    <span className="cart-tag">
+                      {cartProducts ? cartProducts.quantity ?? 0 : 0}
+                    </span>
+                  </>
+                );
+              }
               return (
                 <Link
                   className="item text-blue-default"

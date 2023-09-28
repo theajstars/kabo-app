@@ -13,6 +13,21 @@
       font-size: 15px;
       margin: 0 12px;
     }
+    .cart-tag {
+      margin-left: -10px;
+      margin-top: -15px;
+      vertical-align: top;
+      font-size: 12px;
+      border: 1px solid $BlueDefault;
+      background-color: $BlueDefault;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: $White;
+      width: 20px;
+    }
   }
 }
 .small-nav-logo {

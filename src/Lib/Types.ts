@@ -89,6 +89,20 @@ export type OrderStatus =
   | "";
 
 export type PaymentStatus = "Successful" | "Pending" | "Failed" | "";
+export interface SimpleProduct {
+  poid: string;
+  id: string;
+  name: string;
+  quantity: string;
+  amount: string;
+  vat: string;
+  details: string;
+}
+export interface SimpleStore {
+  store_id: string;
+  name: string;
+  address: string;
+}
 export interface Order {
   payment_status: PaymentStatus;
   order_status: OrderStatus;
@@ -103,17 +117,7 @@ export interface Order {
       address: string;
     }
   ];
-  product: [
-    {
-      poid: string;
-      id: string;
-      name: string;
-      quantity: string;
-      amount: string;
-      vat: string;
-      details: string;
-    }
-  ];
+  product: SimpleProduct[];
   customer: [
     {
       lastname: string;
@@ -168,4 +172,18 @@ export interface TeamMember {
     nok_phone: string;
     nok_valid_license: string;
   };
+}
+export interface Cart {
+  product: null | SimpleProduct[];
+  shipping: null | string;
+  amount: {
+    total: number;
+    product: number;
+    processor: number;
+    shipping: number;
+    vat: number;
+    coupon: number;
+  };
+  quantity: number;
+  store: null | SimpleStore[];
 }

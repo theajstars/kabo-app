@@ -1,12 +1,19 @@
-import { Modal, Skeleton, Stack } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
+
+import { Modal, Skeleton, Stack } from "@mui/material";
+import Cookies from "js-cookie";
 import { useToasts } from "react-toast-notifications";
 
-import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
+import { Endpoints } from "../../Lib/Endpoints";
 import { getFinancialValueFromNumeric } from "../../Lib/Methods";
+import { PerformRequest } from "../../Lib/PerformRequest";
 import { Product } from "../../Lib/Types";
 
+import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
+
 import "./styles.scss";
+import { DefaultResponse } from "../../Lib/Responses";
+import { AppContext } from "../DashboardContainer";
 
 interface ProductCardProps {
   product: Product;
@@ -14,8 +21,7 @@ interface ProductCardProps {
 }
 export default function ProductCard({ product, disabled }: ProductCardProps) {
   const { addToast, removeAllToasts } = useToasts();
-
-  console.log(product);
+  const userContext = useContext(AppContext);
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
   const getProductImage = () => {
@@ -27,6 +33,28 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
       return DefaultImage;
     }
     return DefaultImage;
+  };
+
+  const AddProductToCart = async () => {
+    console.log(product);
+    const token = Cookies.get("token");
+    const r: DefaultResponse = await PerformRequest({
+      route: Endpoints.AddProductToCart,
+      method: "POST",
+      data: {
+        token,
+        id: product.id,
+        quantity: 1,
+      },
+    });
+    if (r && r.data.status === "success") {
+      addToast("Product Added", { appearance: "success" });
+      if (userContext && userContext.reloadCart) {
+        userContext.reloadCart();
+      }
+    } else {
+      addToast(r.data.message, { appearance: "error" });
+    }
   };
   return (
     <div className="product-card-container flex-col align-center justify-between">
@@ -109,7 +137,10 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
           </div>
           <div className="flex-row width-100 align-start justify-between body">
             <div className="flex-col toggle-cart align-center">
-              <span className="action flex-row align-center justify-center pointer">
+              <span
+                className="action flex-row align-center justify-center pointer"
+                onClick={() => AddProductToCart()}
+              >
                 <i className="far fa-plus" />
               </span>
               <span className="px-19 fw-600 amount">0</span>

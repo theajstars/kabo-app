@@ -11,15 +11,15 @@ import {
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
 
-import { Category, Product, Store, User } from "../../Lib/Types";
+import { Cart, Category, Product, Store, User } from "../../Lib/Types";
 
 import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
 import {
+  GetCartResponse,
   GetCategoriesResponse,
   GetProductsResponse,
-  GetUserStoreResponse,
   LoginResponse,
 } from "../../Lib/Responses";
 import MegaLoader from "../../Misc/MegaLoader";
@@ -37,10 +37,12 @@ interface FetchProductProps {
 }
 interface AppContextProps {
   user: User | null;
+  cart: Cart | null;
   categories: Category[] | [];
   products: Product[] | [];
   productCount: number;
   getProducts?: ({ page, limit }: FetchProductProps) => void;
+  reloadCart?: () => void;
   logout: () => void;
 }
 const AppContext = createContext<AppContextProps | null>(null);
@@ -48,6 +50,7 @@ export default function DashboardContainer() {
   const navigate = useNavigate();
   const { addToast, removeAllToasts } = useToasts();
   const [user, setUser] = useState<User | null>(null);
+  const [cart, setCart] = useState<Cart | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
@@ -102,9 +105,22 @@ export default function DashboardContainer() {
       setCategories(r.data.data ?? []);
     }
   };
+  const getCart = async () => {
+    const token = Cookies.get("token");
+    const r: GetCartResponse = await PerformRequest({
+      route: Endpoints.GetUserCart,
+      method: "POST",
+      data: { token: token },
+    });
+    console.log(r);
+    if (r.data && r.data.status === "success") {
+      setCart(r.data.data);
+    }
+  };
 
   useEffect(() => {
     getUser();
+    getCart();
     getCategories();
     getProducts({ page: 1, limit: 15 });
   }, []);
@@ -120,8 +136,10 @@ export default function DashboardContainer() {
         user: user,
         categories: categories,
         logout: logout,
+        cart: cart,
         products: products,
         getProducts: getProducts,
+        reloadCart: getCart,
         productCount: productCount,
       }}
     >

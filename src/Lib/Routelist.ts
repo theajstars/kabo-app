@@ -1,6 +1,6 @@
 const RouteList = [
   { label: "Products", route: "products" },
   { label: "Orders", route: "orders" },
-  { label: "Team", route: "team" },
+  { label: "Cart", route: "cart" },
 ];
 export { RouteList };

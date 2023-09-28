@@ -23,5 +23,6 @@ const Endpoints = {
   GetProductCategory: "/store/category",
 
   GetUserCart: "/order/cart",
+  AddProductToCart: "/order/add",
 };
 export { Endpoints };
