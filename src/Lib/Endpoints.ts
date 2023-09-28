@@ -21,5 +21,7 @@ const Endpoints = {
   GetProducts: "/store/products",
   SearchStores: "/store/search",
   GetProductCategory: "/store/category",
+
+  GetUserCart: "/order/cart",
 };
 export { Endpoints };

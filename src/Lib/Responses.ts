@@ -118,3 +118,24 @@ export interface GetTeamResponse {
     listPerPage: number;
   };
 }
+export interface GetCartResponse {
+  data: {
+    status: ResponseStatus;
+    response_code: number;
+    message: string;
+    data: {
+      product: null | Product[];
+      shipping: null | string;
+      amount: {
+        total: number;
+        product: number;
+        processor: number;
+        shipping: number;
+        vat: number;
+        coupon: number;
+      };
+    };
+    quantity: number;
+    store: null | Store[];
+  };
+}

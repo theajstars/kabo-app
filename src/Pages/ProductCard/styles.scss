@@ -63,12 +63,78 @@
       background-color: $BlueDefault;
     }
   }
-  @media screen and (max-width: 640px) {
-    // & {
-    //   width: 60vw;
-    //   .image {
-    //     width: 100px;
-    //   }
-    // }
+}
+.product-modal {
+  background-color: $White;
+  height: 600px;
+  width: 450px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -225px;
+  margin-top: -300px;
+  outline: none !important;
+  border-radius: 10px;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 20px;
+  .image {
+    height: 200px;
+    width: 200px;
+  }
+  .details {
+    margin: 20px 0;
+    .item {
+      max-width: 200px;
+      text-align: center;
+    }
+  }
+  .body {
+    margin-top: 25px;
+    .toggle-cart {
+      .action {
+        background-color: $WhitePrimary;
+        width: 37px;
+        height: 37px;
+        border-radius: 50%;
+        transition-duration: 0.12s;
+        &:hover {
+          background-color: rgba(185, 185, 185, 0.496);
+        }
+      }
+      .amount {
+        margin: 10px 0;
+      }
+    }
+    .description {
+      color: $GrayDefault;
+      font-size: 14px;
+      width: -webkit-fill-available;
+      padding: 0 20px;
+      box-sizing: border-box;
+      max-height: 200px;
+      line-height: 24px;
+      overflow: auto;
+    }
+    .description::-webkit-scrollbar {
+      width: 7px;
+      border-radius: 20px;
+    }
+    .description::-webkit-scrollbar-track {
+      border-radius: 20px;
+    }
+    .description::-webkit-scrollbar-thumb {
+      border-radius: 20px;
+      background-color: $GrayDefault;
+    }
+  }
+  .save {
+    margin-right: 20px;
+    cursor: pointer;
+    transition-duration: 0.12s;
+    color: $BlueDefault;
+    &:hover {
+      color: $BluePrimary;
+    }
   }
 }

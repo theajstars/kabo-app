@@ -1,8 +1,9 @@
-import { Skeleton, Stack } from "@mui/material";
+import { Modal, Skeleton, Stack } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import { useToasts } from "react-toast-notifications";
 
 import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
+import { getFinancialValueFromNumeric } from "../../Lib/Methods";
 import { Product } from "../../Lib/Types";
 
 import "./styles.scss";
@@ -14,6 +15,9 @@ interface ProductCardProps {
 export default function ProductCard({ product, disabled }: ProductCardProps) {
   const { addToast, removeAllToasts } = useToasts();
 
+  console.log(product);
+  const [isProductModalVisible, setProductModalVisible] =
+    useState<boolean>(false);
   const getProductImage = () => {
     const { main_photo } = product;
     if (main_photo) {
@@ -43,6 +47,9 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
             className={`product-name width-100 align-start flex-row ${
               product.name.length > 30 ? "px-13" : "px-15"
             }`}
+            onClick={() => {
+              setProductModalVisible(true);
+            }}
           >
             {product.name}
           </span>
@@ -74,6 +81,54 @@ export default function ProductCard({ product, disabled }: ProductCardProps) {
           </div>
         </>
       )}
+      <Modal
+        open={isProductModalVisible}
+        onClose={() => {
+          setProductModalVisible(false);
+        }}
+      >
+        <div className="product-modal flex-col">
+          <img src={product.main_photo} alt="" className="image" />
+          <div className="flex-row details align-center justify-between width-100">
+            <div className="item flex-col align-center">
+              <span className="px-15 fw-600 text-dark">{product.name}</span>
+              <span className="px-12 text-dark-secondary">Name</span>
+            </div>
+            <div className="item flex-col align-center">
+              <span className="px-15 fw-600 text-dark">
+                ₦{getFinancialValueFromNumeric(product.amount)}
+              </span>
+              <span className="px-12 text-dark-secondary">Price</span>
+            </div>
+            <div className="item flex-col align-center">
+              <span className="px-15 fw-600 text-dark">
+                {product.store_name}
+              </span>
+              <span className="px-12 text-dark-secondary">Store</span>
+            </div>
+          </div>
+          <div className="flex-row width-100 align-start justify-between body">
+            <div className="flex-col toggle-cart align-center">
+              <span className="action flex-row align-center justify-center pointer">
+                <i className="far fa-plus" />
+              </span>
+              <span className="px-19 fw-600 amount">0</span>
+              <span className="action flex-row align-center justify-center pointer">
+                <i className="far fa-minus" />
+              </span>
+            </div>
+            &nbsp; &nbsp;
+            <span className="description">{product.details}</span>
+          </div>
+          <div className="flex-row align-center justify-end  width-100">
+            <div className="save flex-row align-center">
+              <i className="far fa-heart " />
+              &nbsp;
+              <span className=" px-14">Save for Later</span>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
