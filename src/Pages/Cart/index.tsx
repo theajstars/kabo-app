@@ -14,6 +14,7 @@ import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
 import "./styles.scss";
 import { DefaultResponse } from "../../Lib/Responses";
 import { AppContext } from "../DashboardContainer";
+import ProductCard from "../ProductCard";
 
 export default function Cart() {
   const { addToast, removeAllToasts } = useToasts();
@@ -23,35 +24,53 @@ export default function Cart() {
 
   const [isLoading, setLoading] = useState<boolean>(false);
 
+  const defaultProduct: Product = {
+    id: "",
+    name: "",
+    amount: "",
+    constant_amount: "",
+    details: "",
+    active: "Yes",
+    category_id: "",
+    category_name: "",
+    sub_category_id: "",
+    sub_category_name: "",
+    quantity: "",
+    weight: "",
+    main_photo: "",
+    location: "",
+    photo_a: "",
+    photo_b: "",
+    photo_c: "",
+    photo_d: "",
+    store_id: "",
+    store_name: "",
+  };
   return (
-    <Container maxWidth="lg">
+    <Container
+      maxWidth="lg"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {userContext && userContext.cart && (
         <div className="cart-container flex-col align-center justify-between">
+          <div className="flex-row width-100">
+            <span className="px-20 fw-600 text-dark ">Cart</span>
+          </div>
           {userContext.cart.product && userContext.cart.product.length > 0 ? (
-            <div className="products">
+            <div className="products flex-col">
               {userContext.cart.product.map((product) => {
                 return (
-                  <div className="product flex-row">
-                    <img src={product.main_photo} alt="" className="image" />
-                    <div className="details flex-col">
-                      <span className="text-gray px-14">{product.name}</span>
-                      <span className="text-gray px-14">
-                        ₦{getFinancialValueFromNumeric(product.amount)}
-                      </span>
-                      <div className="flex-row align-center width-100 justify-between actions">
-                        <span className="action flex-row align-center justify-center">
-                          <i className="far fa-minus" />
-                        </span>
-                        <span className="quantity px-14 fw-600 text-dark">
-                          {product.quantity}
-                        </span>
-                        <span className="action flex-row align-center justify-center">
-                          <i className="far fa-plus" />
-                        </span>
-                      </div>
-                    </div>
-                    <i className="far fa-times pointer text-gray" />
-                  </div>
+                  <ProductCard
+                    product={defaultProduct}
+                    disabled={isLoading}
+                    cartProduct={product}
+                    isCartProduct={true}
+                  />
                 );
               })}
             </div>
