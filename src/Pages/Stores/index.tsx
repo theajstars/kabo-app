@@ -43,25 +43,18 @@ export default function Stores() {
 
   // Product Search Params Begin
   const [rowCount, setRowCount] = useState<number>(0);
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 10,
-    page: 0,
-  });
   // Product Search Params End
 
-  const getStores = async () => {
+  const getStores = async (page: number) => {
     if (userContext && userContext.getStores) {
       setLoading(true);
       await userContext.getStores({
-        page: paginationModel.page,
-        limit: paginationModel.pageSize,
+        page: page,
+        limit: 10,
       });
       setLoading(false);
     }
   };
-  useEffect(() => {
-    getStores();
-  }, [paginationModel]);
 
   return (
     <div className="stores-container flex-col width-100">
@@ -154,7 +147,7 @@ export default function Stores() {
                 disabled={isLoading}
                 count={Math.ceil(userContext.storeCount / 10)}
                 onChange={(e, p) => {
-                  setPaginationModel({ ...paginationModel, page: p });
+                  getStores(p);
                 }}
               />
             </div>
