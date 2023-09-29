@@ -62,18 +62,26 @@ export default function Cart() {
             <span className="px-20 fw-600 text-dark ">Cart</span>
           </div>
           {userContext.cart.product && userContext.cart.product.length > 0 ? (
-            <div className="products flex-col">
-              {userContext.cart.product.map((product) => {
-                return (
-                  <ProductCard
-                    product={defaultProduct}
-                    disabled={isLoading}
-                    cartProduct={product}
-                    isCartProduct={true}
-                  />
-                );
-              })}
-            </div>
+            <>
+              <div className="products flex-col">
+                {userContext.cart.product.map((product) => {
+                  return (
+                    <ProductCard
+                      product={defaultProduct}
+                      disabled={isLoading}
+                      cartProduct={product}
+                      isCartProduct={true}
+                    />
+                  );
+                })}
+              </div>
+              <div className="flex-col align-center width-100 justify-between">
+                <span className="text-dark px-12">Total Price</span>
+                <span className="text-dark px-17 fw-600">
+                  ₦{getFinancialValueFromNumeric(userContext.cart.amount.total)}
+                </span>
+              </div>
+            </>
           ) : (
             <>
               <br />

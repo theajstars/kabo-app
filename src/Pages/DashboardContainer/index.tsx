@@ -64,6 +64,9 @@ export default function DashboardContainer() {
 
   const getUser = async () => {
     const token = Cookies.get("token");
+    if (!token) {
+      navigate("/login");
+    }
     const r: LoginResponse = await PerformRequest({
       route: Endpoints.GetUserDetails,
       method: "POST",
