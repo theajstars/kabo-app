@@ -28,5 +28,9 @@ const Endpoints = {
   UpdateCart: "/order/update",
   AddShippingInformation: "/order/shipping",
   CheckoutCart: "/order/checkout",
+
+  GetSavedItems: "/favourite/list",
+  AddToSaved: "/favourite/add",
+  RemoveFromSaved: "/favourite/delete",
 };
 export { Endpoints };

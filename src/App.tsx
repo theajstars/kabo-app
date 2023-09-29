@@ -13,6 +13,7 @@ import Team from "./Pages/Team";
 import Cart from "./Pages/Cart";
 import Stores from "./Pages/Stores";
 import SingleStore from "./Pages/SingleStore";
+import SavedItems from "./Pages/SavedItems";
 
 function App() {
   return (
@@ -25,8 +26,8 @@ function App() {
           <Route path="/dashboard" element={<DashboardContainer />}>
             <Route index element={<Dashboard />} />
             <Route path="/dashboard/products" element={<Products />} />
-            <Route path="/dashboard/orders" element={<Orders />} />
             <Route path="/dashboard/cart" element={<Cart />} />
+            <Route path="/dashboard/saved" element={<SavedItems />} />
             <Route path="/dashboard/stores" element={<Stores />} />
             <Route path="/dashboard/store/:storeID" element={<SingleStore />} />
           </Route>

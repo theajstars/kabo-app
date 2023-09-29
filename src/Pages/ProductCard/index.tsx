@@ -9,16 +9,17 @@ import { useToasts } from "react-toast-notifications";
 import { Endpoints } from "../../Lib/Endpoints";
 import { getFinancialValueFromNumeric } from "../../Lib/Methods";
 import { PerformRequest } from "../../Lib/PerformRequest";
-import { Product, SimpleProduct } from "../../Lib/Types";
+import { Product, SavedItem, SimpleProduct } from "../../Lib/Types";
 
 import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
 
 import "./styles.scss";
 import { DefaultResponse } from "../../Lib/Responses";
 import { AppContext } from "../DashboardContainer";
+import ProgressCircle from "../../Misc/ProgressCircle";
 
 interface ProductCardProps {
-  product: Product;
+  product: Product | SavedItem;
   disabled: boolean;
   isCartProduct?: boolean;
   cartProduct?: SimpleProduct;
@@ -201,6 +202,74 @@ export default function ProductCard({
       addToast(r.data.message, { appearance: "error" });
     }
   };
+
+  const AddItemToSaved = async () => {
+    const id = product.id;
+    setLoading(true);
+
+    const r: DefaultResponse = await PerformRequest({
+      method: "POST",
+      route: Endpoints.AddToSaved,
+      data: {
+        token: Cookies.get("token"),
+        id,
+      },
+    }).catch(() => {
+      setLoading(false);
+    });
+    setLoading(false);
+    console.log(r);
+    if (r && r.data.status === "success") {
+      addToast("Product Saved", { appearance: "success" });
+      if (userContext && userContext.reloadCart) {
+        if (userContext.getSavedItems) {
+          userContext.getSavedItems({});
+        }
+      }
+    } else {
+      addToast(r.data.message, { appearance: "error" });
+    }
+    if (userContext?.getSavedItems) {
+      userContext?.getSavedItems({});
+    }
+  };
+  const RemoveItemFromSaved = async () => {
+    const saved = userContext?.savedItems ?? [];
+    const f = saved.filter((s) => s.id === product.id);
+    const favouriteID = f[0] ? f[0].favourite_id : "";
+    const id = product.id;
+    setLoading(true);
+    const r = await PerformRequest({
+      method: "POST",
+      route: Endpoints.RemoveFromSaved,
+      data: {
+        token: Cookies.get("token"),
+        favourite_id: favouriteID,
+      },
+    }).catch(() => {
+      setLoading(false);
+    });
+    setLoading(false);
+    console.log(r);
+    if (r && r.data.status === "success") {
+      addToast("Product Removed", { appearance: "success" });
+      if (userContext && userContext.reloadCart) {
+        if (userContext.getSavedItems) {
+          userContext.getSavedItems({});
+        }
+      }
+    } else {
+      addToast(r.data.message, { appearance: "error" });
+    }
+    if (userContext?.getSavedItems) {
+      userContext?.getSavedItems({});
+    }
+  };
+  const isProductSaved = () => {
+    const saved = userContext?.savedItems ?? [];
+    const f = saved.filter((s) => s.id === product.id);
+    return f.length !== 0;
+  };
   return (
     <>
       {isCartProduct ? (
@@ -279,11 +348,11 @@ export default function ProductCard({
                     maximumFractionDigits: 2,
                   })}
                 </span>
-                <div className="flex-row align-center justify-center save">
+                {/* <div className="flex-row align-center justify-center save">
                   <span className="icon">
                     <i className="far fa-heart" />
                   </span>
-                </div>
+                </div> */}
               </div>
               <div className="flex-row align-center store">
                 <span className="icon">
@@ -355,10 +424,33 @@ export default function ProductCard({
                 <span className="description">{product.details}</span>
               </div>
               <div className="flex-row align-center justify-end  width-100">
-                <div className="save flex-row align-center">
-                  <i className="far fa-heart " />
-                  &nbsp;
-                  <span className=" px-14">Save for Later</span>
+                <div
+                  className="save flex-row align-center"
+                  onClick={() => {
+                    if (isProductSaved()) {
+                      RemoveItemFromSaved();
+                    } else {
+                      AddItemToSaved();
+                    }
+                  }}
+                >
+                  {isLoading ? (
+                    <ProgressCircle />
+                  ) : (
+                    <>
+                      <i
+                        className={`fa${
+                          isProductSaved() ? "s" : "r"
+                        } fa-heart `}
+                      />
+                      &nbsp;
+                      <span className=" px-14">
+                        {isProductSaved()
+                          ? "Remove from Saved"
+                          : "Save for Later"}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

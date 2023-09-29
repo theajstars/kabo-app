@@ -15,6 +15,7 @@ import {
   Cart as CartType,
   Category,
   Product,
+  SavedItem,
   Store,
   User,
 } from "../../Lib/Types";
@@ -26,6 +27,7 @@ import {
   GetCartResponse,
   GetCategoriesResponse,
   GetProductsResponse,
+  GetSavedItemsResponse,
   GetStoreListResponse,
   LoginResponse,
 } from "../../Lib/Responses";
@@ -39,11 +41,16 @@ import Team from "../Team";
 import Cart from "../Cart";
 import Stores from "../Stores";
 import SingleStore from "../SingleStore";
+import SavedItems from "../SavedItems";
 
 interface FetchProductProps {
   page: number;
   limit: number;
   category_id?: string;
+}
+interface FetchSavedProps {
+  page?: number;
+  limit?: number;
 }
 interface GetStoresProps {
   page: number;
@@ -61,6 +68,10 @@ interface AppContextProps {
   stores: Store[] | [];
   getStores?: ({ page, limit }: FetchProductProps) => void;
   storeCount: number;
+
+  savedItems: SavedItem[] | [];
+  getSavedItems?: ({ page, limit }: FetchSavedProps) => void;
+  savedItemsCount: number;
 }
 const AppContext = createContext<AppContextProps | null>(null);
 export default function DashboardContainer() {
@@ -74,6 +85,9 @@ export default function DashboardContainer() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
+
+  const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
+  const [savedItemsCount, setSavedItemsCount] = useState<number>(0);
 
   const getUser = async () => {
     const token = Cookies.get("token");
@@ -157,9 +171,33 @@ export default function DashboardContainer() {
     }
   };
 
+  const getSavedItems = async ({ page, limit }: FetchSavedProps) => {
+    const token = Cookies.get("token");
+    const data =
+      page && limit
+        ? {
+            token: token,
+            page: page,
+            limit: limit,
+          }
+        : {
+            token: token,
+          };
+    const r: GetSavedItemsResponse = await PerformRequest({
+      route: Endpoints.GetSavedItems,
+      method: "POST",
+      data: data,
+    });
+    console.log(r);
+    if (r.data && r.data.status === "success") {
+      setSavedItems(r.data.data ?? []);
+      setSavedItemsCount(r.data.counts ?? 0);
+    }
+  };
   useEffect(() => {
     getUser();
     getCart();
+    getSavedItems({ page: 1, limit: 15 });
     getCategories();
     getProducts({ page: 1, limit: 15 });
     getStores({ page: 1, limit: 10 });
@@ -184,15 +222,17 @@ export default function DashboardContainer() {
         stores: stores,
         getStores: getStores,
         storeCount: storeCount,
+        savedItems: savedItems,
+        getSavedItems: getSavedItems,
+        savedItemsCount: savedItemsCount,
       }}
     >
       <Navbar />
       <Routes>
         <Route index path="/" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/team" element={<Team />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/saved" element={<SavedItems />} />
         <Route path="/stores" element={<Stores />} />
         <Route path="/store/:storeID" element={<SingleStore />} />
       </Routes>

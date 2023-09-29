@@ -97,31 +97,40 @@ export default function SingleStore() {
     <div className="orders-container flex-col width-100">
       {userContext?.user && storeProducts ? (
         <>
-          {isLoading}
           <div className="top width-100 flex-col">
             <div className="flex-row width-100 align-center justify-between">
-              <span className="text-dark fw-500 px-20">Store Name</span>
+              <span className="text-dark fw-500 px-20">
+                {storeProducts[0] && storeProducts[0].store_name
+                  ? storeProducts[0].store_name
+                  : ""}
+              </span>
               {/* <span className="text-dark fw-500 px-20">{store.name}</span> */}
             </div>
             <br />
           </div>
-          {storeProducts.length === 0 ? (
-            <Alert severity="info">No Products found!</Alert>
+          {isLoading ? (
+            <MegaLoader />
           ) : (
-            <Grid
-              container
-              spacing={4}
-              alignItems="center"
-              justifyContent="center"
-            >
-              {storeProducts.map((product) => {
-                return (
-                  <Grid item>
-                    <ProductCard product={product} disabled={false} />
-                  </Grid>
-                );
-              })}
-            </Grid>
+            <>
+              {storeProducts.length === 0 ? (
+                <Alert severity="info">No Products found!</Alert>
+              ) : (
+                <Grid
+                  container
+                  spacing={4}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {storeProducts.map((product) => {
+                    return (
+                      <Grid item>
+                        <ProductCard product={product} disabled={false} />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              )}
+            </>
           )}
 
           <br />

@@ -3,6 +3,7 @@ import {
   Category,
   Order,
   Product,
+  SavedItem,
   SimpleSingleStore,
   Store,
   SubCategory,
@@ -134,5 +135,19 @@ export interface GetCartResponse {
     response_code: number;
     message: string;
     data: Cart;
+  };
+}
+
+export interface GetSavedItemsResponse {
+  data: {
+    token: string;
+    status: ResponseStatus;
+    response_code: number;
+    message: string;
+    data: SavedItem[];
+    counts: number;
+    totalPages: number;
+    currentPage: number;
+    listPerPage: string;
   };
 }
