@@ -71,7 +71,7 @@ export default function Cart() {
       setLoading(false);
       console.log(r);
       if (r && r.data) {
-        setShippingAddressPresent(true);
+        setShippingAddressPresent(r.data.status === "success");
         addToast(r.data.message, {
           appearance: r.data.status === "success" ? "success" : "error",
         });

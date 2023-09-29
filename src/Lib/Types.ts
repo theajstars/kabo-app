@@ -105,6 +105,14 @@ export interface SimpleStore {
   name: string;
   address: string;
 }
+export interface SimpleSingleStore {
+  store_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  description: string;
+  photo: string;
+}
 export interface Order {
   payment_status: PaymentStatus;
   order_status: OrderStatus;

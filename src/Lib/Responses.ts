@@ -3,6 +3,7 @@ import {
   Category,
   Order,
   Product,
+  SimpleSingleStore,
   Store,
   SubCategory,
   TeamMember,
@@ -50,6 +51,14 @@ export interface GetStoreListResponse {
     totalPages: number;
     currentPage: number;
     listPerPage: string;
+  };
+}
+export interface GetSingleStoreResponse {
+  data: {
+    status: ResponseStatus;
+    response_code: number;
+    message: string;
+    data: SimpleSingleStore;
   };
 }
 export interface GetUserStoreResponse {

@@ -12,6 +12,7 @@ import Orders from "./Pages/Orders";
 import Team from "./Pages/Team";
 import Cart from "./Pages/Cart";
 import Stores from "./Pages/Stores";
+import SingleStore from "./Pages/SingleStore";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/dashboard/orders" element={<Orders />} />
             <Route path="/dashboard/cart" element={<Cart />} />
             <Route path="/dashboard/stores" element={<Stores />} />
+            <Route path="/dashboard/store/:storeID" element={<SingleStore />} />
           </Route>
         </Routes>
       </Router>

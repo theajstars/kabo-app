@@ -87,7 +87,15 @@ export default function Stores() {
                 {userContext.stores.map((store) => {
                   return (
                     <Grid item>
-                      <div className="store-card flex-col align-center">
+                      <Link
+                        className="store-card flex-col align-center"
+                        to={`/dashboard/store/${store.store_id}`}
+                        onClick={(e) => {
+                          if (isLoading) {
+                            e.preventDefault();
+                          }
+                        }}
+                      >
                         {isLoading ? (
                           <Stack spacing={1}>
                             <Skeleton
@@ -135,7 +143,7 @@ export default function Stores() {
                             </span>
                           </>
                         )}
-                      </div>
+                      </Link>
                     </Grid>
                   );
                 })}
