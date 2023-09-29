@@ -5,12 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Drawer,
-  Button,
+  Badge,
   List,
   ListItem,
   Divider,
   ListItemButton,
   ListItemText,
+  Chip,
 } from "@mui/material";
 
 import Logo from "../../Assets/IMG/Logo.png";
@@ -26,8 +27,8 @@ export default function Navbar() {
   const navigate = useNavigate();
   const userContext = useContext(AppContext);
 
-  const screenWidth = window.innerWidth;
   const cartProducts = userContext?.cart;
+  const screenWidth = window.innerWidth;
 
   return (
     <>
@@ -81,6 +82,8 @@ export default function Navbar() {
 
 function TemporaryDrawer() {
   const userContext = useContext(AppContext);
+
+  const cartProducts = userContext?.cart;
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -113,13 +116,41 @@ function TemporaryDrawer() {
         <img className="small-nav-logo" src={Logo} alt="" />
       </Link>
       <List>
-        {RouteList.map((route) => (
-          <ListItem key={route.label} disablePadding>
-            <ListItemButton href={`/dashboard/${route.route}`}>
-              <ListItemText primary={route.label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {RouteList.map((route) => {
+          if (route.route === "cart") {
+            return (
+              <ListItem key={route.label} disablePadding>
+                <ListItemButton href={`/dashboard/${route.route}`}>
+                  <ListItemText
+                    primary={
+                      <span className="flex-row align-center">
+                        Cart &nbsp;
+                        <Chip
+                          color="primary"
+                          label={cartProducts ? cartProducts.quantity ?? 0 : 0}
+                        />
+                      </span>
+                    }
+                  />
+                </ListItemButton>
+              </ListItem>
+            );
+          } else {
+            return (
+              <ListItem key={route.label} disablePadding>
+                <ListItemButton href={`/dashboard/${route.route}`}>
+                  <ListItemText
+                    primary={
+                      <span className="flex-row align-center">
+                        {route.label}
+                      </span>
+                    }
+                  />
+                </ListItemButton>
+              </ListItem>
+            );
+          }
+        })}
       </List>
       <Divider />
       <List>
@@ -129,7 +160,9 @@ function TemporaryDrawer() {
               userContext?.logout();
             }}
           >
-            <ListItemText primary={"Logout"} />
+            <ListItemText
+              primary={<span className="flex-row align-center">Logout</span>}
+            />
           </ListItemButton>
         </ListItem>
       </List>

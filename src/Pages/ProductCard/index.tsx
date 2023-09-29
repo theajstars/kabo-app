@@ -221,16 +221,11 @@ export default function ProductCard({
     console.log(r);
     if (r && r.data.status === "success") {
       addToast("Product Saved", { appearance: "success" });
-      if (userContext && userContext.reloadCart) {
-        if (userContext.getSavedItems) {
-          userContext.getSavedItems({});
-        }
+      if (userContext && userContext.getSavedItems) {
+        userContext.getSavedItems({});
       }
     } else {
       addToast(r.data.message, { appearance: "error" });
-    }
-    if (userContext?.getSavedItems) {
-      userContext?.getSavedItems({});
     }
   };
   const RemoveItemFromSaved = async () => {
@@ -253,16 +248,12 @@ export default function ProductCard({
     console.log(r);
     if (r && r.data.status === "success") {
       addToast("Product Removed", { appearance: "success" });
-      if (userContext && userContext.reloadCart) {
-        if (userContext.getSavedItems) {
-          userContext.getSavedItems({});
-        }
+
+      if (userContext && userContext.getSavedItems) {
+        userContext.getSavedItems({});
       }
     } else {
       addToast(r.data.message, { appearance: "error" });
-    }
-    if (userContext?.getSavedItems) {
-      userContext?.getSavedItems({});
     }
   };
   const isProductSaved = () => {
