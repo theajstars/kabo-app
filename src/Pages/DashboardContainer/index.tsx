@@ -71,7 +71,7 @@ export default function DashboardContainer() {
       route: Endpoints.GetUserDetails,
       method: "POST",
       data: { token: token },
-    });
+    }).catch(() => {});
     console.log(r);
     if (r.data && r.data.data) {
       setUser(r.data.data);

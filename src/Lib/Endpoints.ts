@@ -26,5 +26,7 @@ const Endpoints = {
   AddProductToCart: "/order/add",
   RemoveProductFromCart: "/order/remove",
   UpdateCart: "/order/update",
+  AddShippingInformation: "/order/shipping",
+  CheckoutCart: "/order/checkout",
 };
 export { Endpoints };

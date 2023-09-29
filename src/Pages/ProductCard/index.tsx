@@ -238,14 +238,14 @@ export default function ProductCard({
                   </button>
                 </div>
               </div>
+              <i
+                className="far fa-times pointer text-gray"
+                onClick={() => {
+                  DeleteProductFromCart();
+                }}
+              />
             </>
           )}
-          <i
-            className="far fa-times pointer text-gray"
-            onClick={() => {
-              DeleteProductFromCart();
-            }}
-          />
         </div>
       ) : (
         <div className="product-card-container flex-col align-center justify-between">
