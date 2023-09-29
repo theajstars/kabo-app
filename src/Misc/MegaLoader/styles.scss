@@ -1,8 +1,9 @@
 .megaloader-container {
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
   position: fixed;
-  top: 0;
+  top: 10vh;
+  background-color: transparent;
   left: 0;
   z-index: 99999;
   overflow: clip;

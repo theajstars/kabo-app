@@ -289,13 +289,14 @@ export default function ProductCard({
                 <span className="icon">
                   <i className="far fa-store" />
                 </span>
-                <span
+                <Link
+                  to={`/dashboard/store/${product.store_id}`}
                   className={`name capitalize ${
                     product.store_name.length > 15 ? "px-10" : "px-15"
                   }`}
                 >
                   {product.store_name}
-                </span>
+                </Link>
               </div>
             </>
           )}
