@@ -11,6 +11,7 @@ import DashboardContainer from "./Pages/DashboardContainer";
 import Orders from "./Pages/Orders";
 import Team from "./Pages/Team";
 import Cart from "./Pages/Cart";
+import Stores from "./Pages/Stores";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/dashboard/products" element={<Products />} />
             <Route path="/dashboard/orders" element={<Orders />} />
             <Route path="/dashboard/cart" element={<Cart />} />
+            <Route path="/dashboard/stores" element={<Stores />} />
           </Route>
         </Routes>
       </Router>

@@ -36,6 +36,7 @@ import Navbar from "../Navbar";
 import Orders from "../Orders";
 import Team from "../Team";
 import Cart from "../Cart";
+import Stores from "../Stores";
 
 interface FetchProductProps {
   page: number;
@@ -160,6 +161,7 @@ export default function DashboardContainer() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/team" element={<Team />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/stores" element={<Stores />} />
       </Routes>
     </AppContext.Provider>
   );
