@@ -26,6 +26,7 @@ import {
   GetCartResponse,
   GetCategoriesResponse,
   GetProductsResponse,
+  GetStoreListResponse,
   LoginResponse,
 } from "../../Lib/Responses";
 import MegaLoader from "../../Misc/MegaLoader";
@@ -43,15 +44,22 @@ interface FetchProductProps {
   limit: number;
   category_id?: string;
 }
+interface GetStoresProps {
+  page: number;
+  limit: number;
+}
 interface AppContextProps {
   user: User | null;
+  logout: () => void;
   cart: CartType | null;
+  reloadCart?: () => void;
   categories: Category[] | [];
   products: Product[] | [];
   productCount: number;
   getProducts?: ({ page, limit }: FetchProductProps) => void;
-  reloadCart?: () => void;
-  logout: () => void;
+  stores: Store[] | [];
+  getStores?: ({ page, limit }: FetchProductProps) => void;
+  storeCount: number;
 }
 const AppContext = createContext<AppContextProps | null>(null);
 export default function DashboardContainer() {
@@ -59,6 +67,9 @@ export default function DashboardContainer() {
   const { addToast, removeAllToasts } = useToasts();
   const [user, setUser] = useState<User | null>(null);
   const [cart, setCart] = useState<CartType | null>(null);
+  const [stores, setStores] = useState<Store[]>([]);
+  const [storeCount, setStoreCount] = useState<number>(0);
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [productCount, setProductCount] = useState<number>(0);
@@ -128,12 +139,29 @@ export default function DashboardContainer() {
       setCart(r.data.data);
     }
   };
+  const getStores = async ({ page, limit }: GetStoresProps) => {
+    const token = Cookies.get("token");
+    const r: GetStoreListResponse = await PerformRequest({
+      route: Endpoints.GetStoreList,
+      method: "POST",
+      data: {
+        token: token,
+        page: page,
+        limit: limit,
+      },
+    }).catch(() => {});
+    if (r.data && r.data.data) {
+      setStores(r.data.data);
+      setStoreCount(r.data.counts);
+    }
+  };
 
   useEffect(() => {
     getUser();
     getCart();
     getCategories();
     getProducts({ page: 1, limit: 15 });
+    getStores({ page: 1, limit: 10 });
   }, []);
 
   const logout = () => {
@@ -145,13 +173,16 @@ export default function DashboardContainer() {
     <AppContext.Provider
       value={{
         user: user,
-        categories: categories,
         logout: logout,
+        categories: categories,
         cart: cart,
+        reloadCart: getCart,
         products: products,
         getProducts: getProducts,
-        reloadCart: getCart,
         productCount: productCount,
+        stores: stores,
+        getStores: getStores,
+        storeCount: storeCount,
       }}
     >
       <Navbar />

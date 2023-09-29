@@ -1,6 +1,6 @@
 @import "../../Variables.scss";
 
-.products-container {
+.stores-container {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -9,10 +9,31 @@
     padding: 30px;
     padding-bottom: 0px;
   }
+  .store-loader {
+    margin: 50px 0;
+  }
   .table {
     width: 100%;
     box-sizing: border-box;
     padding: 30px;
+  }
+  .store-card {
+    width: 250px;
+    background-color: $White;
+    box-sizing: border-box;
+    padding: 30px 10px;
+    height: 300px;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0px 2px 10px 0px rgba(58, 53, 65, 0.1);
+    transition-duration: 0.12s;
+    &:hover {
+      background-color: $WhitePrimary;
+    }
+    .image {
+      width: 100px;
+      height: 100px;
+    }
   }
 }
 .css-5wly58-MuiDataGrid-root {

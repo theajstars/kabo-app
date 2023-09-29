@@ -59,6 +59,7 @@ export interface Product {
 }
 export interface Store {
   address: string;
+  city: string;
   bankDetails: {
     account_no: string;
     bank_code: string;
@@ -66,7 +67,7 @@ export interface Store {
   };
   description: string;
   email: string;
-  logo: string;
+  photo: string;
   metrics: {
     total_active_products: number;
     total_inactive_products: number;
