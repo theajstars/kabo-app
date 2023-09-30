@@ -1,22 +1,24 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useRef, useContext } from "react";
 
 import { Container, Alert, Divider, Button } from "@mui/material";
 import Cookies from "js-cookie";
 import { useToasts } from "react-toast-notifications";
+import { PaystackConsumer } from "react-paystack";
 
 import { Endpoints } from "../../Lib/Endpoints";
 import { getFinancialValueFromNumeric } from "../../Lib/Methods";
 import { PerformRequest } from "../../Lib/PerformRequest";
-import { Product } from "../../Lib/Types";
+import { PaystackConfigProps, Product } from "../../Lib/Types";
 
 import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
 
 import "./styles.scss";
-import { DefaultResponse } from "../../Lib/Responses";
+import { CheckoutResponse, DefaultResponse } from "../../Lib/Responses";
 import { AppContext } from "../DashboardContainer";
 import ProductCard from "../ProductCard";
 import ProgressCircle from "../../Misc/ProgressCircle";
 import MegaLoader from "../../Misc/MegaLoader";
+import { locations } from "../../Lib/appConfig";
 
 export default function Cart() {
   const { addToast, removeAllToasts } = useToasts();
@@ -25,7 +27,22 @@ export default function Cart() {
     useState<boolean>(false);
 
   const [isLoading, setLoading] = useState<boolean>(false);
+
   const [shippingAddress, setShippingAddress] = useState<string>("");
+  const [shippingLocation, setShippingLocation] = useState<string>("Ikeja");
+  const [referenceCode, setReferenceCode] = useState<string>("");
+  const [isPaymentShowing, setPaymentShowing] = useState<boolean>(true);
+  const paystackButtonRef = useRef<HTMLButtonElement>(null);
+
+  const [paystackConfig, setPaystackConfig] = useState<PaystackConfigProps>({
+    reference: "",
+    amount: 0,
+    publicKey: "",
+    email: "",
+    text: "",
+    onSuccess: () => {},
+    onClose: () => {},
+  });
   const [isShippingAddressPresent, setShippingAddressPresent] =
     useState<boolean>(false);
 
@@ -63,8 +80,8 @@ export default function Cart() {
         route: Endpoints.AddShippingInformation,
         data: {
           token: Cookies.get("token"),
-          details: shippingAddress,
-          info: shippingAddress,
+          details: `${shippingAddress} ${shippingLocation}`,
+          info: `${shippingAddress} ${shippingLocation}`,
         },
       }).catch(() => {
         setLoading(false);
@@ -84,7 +101,7 @@ export default function Cart() {
       addToast("You must have an address!", { appearance: "error" });
     } else {
       setLoading(true);
-      const r = await PerformRequest({
+      const r: CheckoutResponse = await PerformRequest({
         method: "POST",
         route: Endpoints.CheckoutCart,
         data: {
@@ -94,9 +111,35 @@ export default function Cart() {
         setLoading(false);
       });
       console.log(r);
+      if (r.data && r.data.status == "success") {
+        setReferenceCode(r.data.reference_code);
+      }
       setLoading(false);
     }
   };
+  const generatePaystackConfig = async () => {
+    if (userContext && userContext.cart) {
+      const amount = userContext.cart.amount.total;
+
+      setLoading(true);
+
+      const r: DefaultResponse = await PerformRequest({
+        route: "",
+        method: "POST",
+        data: { amount: amount, method: "card", id: "" },
+      }).catch(() => {
+        setLoading(false);
+      });
+
+      console.log(r);
+      if (r.data && r.data.status === "failed") {
+        setLoading(false);
+      }
+      if (r.data.response_code === 200) {
+      }
+    }
+  };
+
   return (
     <Container
       maxWidth="lg"
@@ -166,8 +209,22 @@ export default function Cart() {
                   ₦{getFinancialValueFromNumeric(userContext.cart.amount.total)}
                 </span>
               </div>
+              <br />
               <div className="flex-row width-100">
-                <span className="px-13 text-dark">Shipping Address</span>
+                <span className="px-13 text-dark fw-500">Address Details</span>
+              </div>
+              <div className="flex-col select-container">
+                <small className="px-12">&nbsp;Region</small>
+                <select
+                  disabled={isLoading}
+                  className="select"
+                  value={shippingLocation}
+                  onChange={(e) => setShippingLocation(e.target.value)}
+                >
+                  {locations.map((location, index) => {
+                    return <option value={location}>{location}</option>;
+                  })}
+                </select>
               </div>
               <textarea
                 disabled={isShippingAddressPresent || isLoading}
@@ -209,6 +266,24 @@ export default function Cart() {
                   "Submit"
                 )}
               </Button>
+              {isPaymentShowing && (
+                <PaystackConsumer {...paystackConfig}>
+                  {({ initializePayment }) => (
+                    <button
+                      onClick={() =>
+                        initializePayment(
+                          paystackConfig?.onSuccess,
+                          paystackConfig?.onClose
+                        )
+                      }
+                      className="none"
+                      ref={paystackButtonRef}
+                    >
+                      Paystack Consumer Implementation
+                    </button>
+                  )}
+                </PaystackConsumer>
+              )}
             </>
           ) : (
             <>

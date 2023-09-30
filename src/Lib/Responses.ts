@@ -151,3 +151,11 @@ export interface GetSavedItemsResponse {
     listPerPage: string;
   };
 }
+export interface CheckoutResponse {
+  data: {
+    status: ResponseStatus;
+    response_code: number;
+    message: string;
+    reference_code: string;
+  };
+}

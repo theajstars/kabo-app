@@ -221,3 +221,13 @@ export interface SavedItem {
   store_id: string;
   store_name: string;
 }
+
+export interface PaystackConfigProps {
+  reference: string;
+  amount: number;
+  publicKey: string;
+  email: string;
+  text: string;
+  onSuccess: any;
+  onClose: any;
+}
