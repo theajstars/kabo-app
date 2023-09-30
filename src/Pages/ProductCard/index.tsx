@@ -191,12 +191,12 @@ export default function ProductCard({
         poid: [poid],
       },
     }).catch(() => [setLoading(false)]);
-    setLoading(false);
 
     if (r && r.data.status === "success") {
       addToast("Product Removed", { appearance: "success" });
       if (userContext && userContext.reloadCart) {
-        userContext.reloadCart();
+        await userContext.reloadCart();
+        setLoading(false);
       }
     } else {
       addToast(r.data.message, { appearance: "error" });
@@ -281,7 +281,11 @@ export default function ProductCard({
                     className="action flex-row align-center justify-center"
                     onClick={() => RemoveProductFromCart()}
                   >
-                    <i className="far fa-minus" />
+                    {isLoading ? (
+                      <ProgressCircle />
+                    ) : (
+                      <i className="far fa-minus" />
+                    )}
                   </button>
                   <span
                     className="quantity px-16 fw-600 text-dark"
@@ -296,12 +300,16 @@ export default function ProductCard({
                     className="action flex-row align-center justify-center"
                     onClick={() => AddProductToCart()}
                   >
-                    <i className="far fa-plus" />
+                    {isLoading ? (
+                      <ProgressCircle />
+                    ) : (
+                      <i className="far fa-plus" />
+                    )}
                   </button>
                 </div>
               </div>
               <i
-                className="far fa-times pointer text-gray"
+                className="far fa-times pointer text-gray remove-product"
                 onClick={() => {
                   DeleteProductFromCart();
                 }}

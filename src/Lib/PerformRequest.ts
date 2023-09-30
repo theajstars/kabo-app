@@ -7,7 +7,7 @@ interface RequestOptions {
   data: any;
   route: string;
 }
-const baseURL = "https://kabo.designparklab.com.ng";
+const baseURL = "https://api.kabo.delivery";
 const PerformRequest = async ({ method, data, route }: RequestOptions) => {
   const config = {
     method,

@@ -42,25 +42,7 @@ export default function SingleStore() {
 
   const params = useParams();
   const storeID = params.storeID;
-  const getStore = async () => {
-    const token = Cookies.get("token");
-    setLoading(true);
-    const r: GetSingleStoreResponse = await PerformRequest({
-      route: Endpoints.GetOrders,
-      method: "POST",
-      data: {
-        token: token,
-        store_id: storeID,
-      },
-    }).catch(() => {
-      setLoading(false);
-    });
-    console.log(r);
-    setLoading(false);
-    if (r.data && r.data.data) {
-      setStore(r.data.data);
-    }
-  };
+
   const getStoreProducts = async () => {
     const token = Cookies.get("token");
     setLoading(true);
@@ -84,11 +66,7 @@ export default function SingleStore() {
     }
   };
 
-  useEffect(() => {
-    if (params.storeID) {
-      getStore();
-    }
-  }, [params]);
+  useEffect(() => {}, [params]);
   useEffect(() => {
     getStoreProducts();
   }, [page]);

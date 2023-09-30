@@ -16,6 +16,7 @@ import { DefaultResponse } from "../../Lib/Responses";
 import { AppContext } from "../DashboardContainer";
 import ProductCard from "../ProductCard";
 import ProgressCircle from "../../Misc/ProgressCircle";
+import MegaLoader from "../../Misc/MegaLoader";
 
 export default function Cart() {
   const { addToast, removeAllToasts } = useToasts();
@@ -106,7 +107,7 @@ export default function Cart() {
         justifyContent: "center",
       }}
     >
-      {userContext && userContext.cart && (
+      {userContext && userContext.cart ? (
         <div className="cart-container flex-col align-center justify-between">
           <div className="flex-row width-100">
             <span className="px-20 fw-600 text-dark ">Cart</span>
@@ -218,6 +219,8 @@ export default function Cart() {
             </>
           )}
         </div>
+      ) : (
+        <MegaLoader />
       )}
     </Container>
   );
