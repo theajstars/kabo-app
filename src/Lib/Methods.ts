@@ -65,9 +65,20 @@ const getHalfDate = (dateString: string | undefined) => {
   }
   return dateString;
 };
+function validatePhoneNumber(input_str: string) {
+  var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+  let str = input_str.replaceAll("+", "");
+  if (str.substring(0, 3) === "234") {
+    str = str.replace("234", "");
+  }
+  // var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+
+  return re.test(str);
+}
 export {
   validateEmail,
   getFinancialValueFromNumeric,
   getFullDate,
   getHalfDate,
+  validatePhoneNumber,
 };
