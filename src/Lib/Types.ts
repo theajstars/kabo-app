@@ -221,7 +221,18 @@ export interface SavedItem {
   store_id: string;
   store_name: string;
 }
-
+export interface Wallet {
+  wallet_id: string;
+  account: "panel" | "customer" | "rider";
+  available_balance: string;
+  ledger_balance: string;
+  virtual_account: {
+    virtual_account_bank_name: string;
+    virtual_account_name: string;
+    virtual_bank_code: string;
+    virtual_account_no: string;
+  };
+}
 export interface PaystackConfigProps {
   reference: string;
   amount: number;

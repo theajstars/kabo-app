@@ -9,6 +9,7 @@ import {
   SubCategory,
   TeamMember,
   User,
+  Wallet,
 } from "./Types";
 
 type ResponseStatus = "success" | "failed";
@@ -153,6 +154,15 @@ export interface GetSavedItemsResponse {
 }
 export interface CheckoutResponse {
   data: {
+    status: ResponseStatus;
+    response_code: number;
+    message: string;
+    reference_code: string;
+  };
+}
+export interface GetWalletResponse {
+  data: {
+    data: Wallet[];
     status: ResponseStatus;
     response_code: number;
     message: string;
