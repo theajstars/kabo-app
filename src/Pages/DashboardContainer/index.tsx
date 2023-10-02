@@ -42,6 +42,7 @@ import Cart from "../Cart";
 import Stores from "../Stores";
 import SingleStore from "../SingleStore";
 import SavedItems from "../SavedItems";
+import Profile from "../Profile";
 
 interface FetchProductProps {
   page: number;
@@ -59,6 +60,7 @@ interface GetStoresProps {
 interface AppContextProps {
   user: User | null;
   logout: () => void;
+  getUser: () => void;
   cart: CartType | null;
   reloadCart?: () => void;
   categories: Category[] | [];
@@ -212,6 +214,7 @@ export default function DashboardContainer() {
     <AppContext.Provider
       value={{
         user: user,
+        getUser: getUser,
         logout: logout,
         categories: categories,
         cart: cart,
@@ -234,6 +237,7 @@ export default function DashboardContainer() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/saved" element={<SavedItems />} />
         <Route path="/stores" element={<Stores />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/store/:storeID" element={<SingleStore />} />
       </Routes>
     </AppContext.Provider>

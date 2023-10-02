@@ -17,6 +17,7 @@ const Endpoints = {
   RegisterUser: "/account/register",
   LoginUser: "/account/login",
   GetUserDetails: "/account/details",
+  UpdateAccount: "/store/update-account",
 
   GetProducts: "/store/products",
   SearchStores: "/store/search",
