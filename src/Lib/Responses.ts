@@ -1,4 +1,5 @@
 import {
+  Bank,
   Cart,
   Category,
   Order,
@@ -128,6 +129,14 @@ export interface GetTeamResponse {
     totalPages: number;
     currentPage: number;
     listPerPage: number;
+  };
+}
+export interface GetBanksResponse {
+  data: {
+    status: ResponseStatus;
+    response_code: number;
+    message: string;
+    data: Bank[];
   };
 }
 export interface GetCartResponse {

@@ -233,6 +233,10 @@ export interface Wallet {
     virtual_account_no: string;
   };
 }
+export interface Bank {
+  bank_code: string;
+  bank_name: string;
+}
 export interface PaystackConfigProps {
   reference: string;
   amount: number;

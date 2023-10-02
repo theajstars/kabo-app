@@ -43,6 +43,7 @@ import Stores from "../Stores";
 import SingleStore from "../SingleStore";
 import SavedItems from "../SavedItems";
 import Profile from "../Profile";
+import Wallet from "../Wallet";
 
 interface FetchProductProps {
   page: number;
@@ -238,6 +239,7 @@ export default function DashboardContainer() {
         <Route path="/saved" element={<SavedItems />} />
         <Route path="/stores" element={<Stores />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/wallet" element={<Wallet />} />
         <Route path="/store/:storeID" element={<SingleStore />} />
       </Routes>
     </AppContext.Provider>
