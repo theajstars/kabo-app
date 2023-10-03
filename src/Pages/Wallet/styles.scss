@@ -20,8 +20,7 @@
       padding: 20px 0;
       .item {
         max-width: 400px;
-        .left {
-        }
+
         .left {
           .icon {
             height: 45px;
@@ -191,12 +190,19 @@
           .item {
             width: 100%;
             max-width: unset;
-            .left {
-            }
-            .rule {
-              width: 50px;
-            }
           }
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 748px) {
+    & {
+      .actions {
+        .actions-grid-item,
+        .transfer,
+        .bank,
+        .user-bank {
+          width: 100% !important;
         }
       }
     }
