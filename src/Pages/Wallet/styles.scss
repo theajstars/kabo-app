@@ -71,6 +71,64 @@
         font-weight: 600;
       }
     }
+    .transfer {
+      box-sizing: border-box;
+      height: 230px;
+      width: 330px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+      cursor: pointer;
+      transition-duration: 0.12s;
+      background: url("../../Assets/IMG/BlueBackground.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      .input::placeholder {
+        font-size: 14px;
+        font-weight: 400;
+      }
+      .input[type="text"] {
+        text-transform: uppercase;
+      }
+      .input[type="text"]::placeholder {
+        text-transform: capitalize;
+      }
+      .input {
+        width: 100%;
+        outline: none;
+        height: 35px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 0 10px;
+        box-sizing: border-box;
+      }
+      .input::-webkit-outer-spin-button,
+      .input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .pay {
+        height: 35px;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        color: $White;
+        border-radius: 5px;
+        background-color: $PurpleDefault;
+        cursor: pointer;
+        transition-duration: 0.12s;
+        &:disabled {
+          background-color: $White;
+          color: $WhitePrimary;
+        }
+        &:not(:disabled):hover {
+          background-color: $BlueDefault;
+        }
+      }
+    }
   }
   @media screen and (max-width: 800px) {
     & {

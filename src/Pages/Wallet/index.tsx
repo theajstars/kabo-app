@@ -118,7 +118,7 @@ export default function Wallet() {
             <div className="flex-row width-100 justify-between actions">
               <CopyToClipboard
                 text={
-                  userContext.wallet?.virtual_account.virtual_account_no ?? ""
+                  userContext.wallet?.virtual_account.virtual_account_no ?? " "
                 }
                 onCopy={() => {
                   removeAllToasts();
@@ -142,6 +142,29 @@ export default function Wallet() {
                   <span className="number text-blue-default">1219883420</span>
                 </div>
               </CopyToClipboard>
+              <div className="flex-col justify-between transfer">
+                <div className="flex-row align-center">
+                  <span className="text-white px-16 fw-500 label">
+                    Wallet Transfer
+                  </span>
+                  &nbsp; &nbsp;
+                  <span className="icon px-20 flex-row align-center justify-center text-white">
+                    <i className="far fa-shopping-bag" />
+                  </span>
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Input Wallet ID"
+                  className="input"
+                />
+                <input
+                  type="number"
+                  placeholder="Enter Amount"
+                  className="input"
+                />
+                <button className="pay">Continue</button>
+              </div>
             </div>
           </>
         ) : (
