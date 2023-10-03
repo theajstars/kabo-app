@@ -3,5 +3,6 @@ const RouteList = [
   { label: "Saved Items", route: "saved" },
   { label: "Cart", route: "cart" },
   { label: "My Profile", route: "profile" },
+  { label: "Wallet", route: "wallet" },
 ];
 export { RouteList };

@@ -18,6 +18,7 @@ import {
   SavedItem,
   Store,
   User,
+  Wallet as WalletType,
 } from "../../Lib/Types";
 
 import "./styles.scss";
@@ -29,6 +30,7 @@ import {
   GetProductsResponse,
   GetSavedItemsResponse,
   GetStoreListResponse,
+  GetWalletResponse,
   LoginResponse,
 } from "../../Lib/Responses";
 import MegaLoader from "../../Misc/MegaLoader";
@@ -73,6 +75,7 @@ interface AppContextProps {
   storeCount: number;
 
   savedItems: SavedItem[] | [];
+  wallet: WalletType | null;
   getSavedItems?: ({ page, limit }: FetchSavedProps) => void;
   savedItemsCount: number;
 }
@@ -87,6 +90,7 @@ export default function DashboardContainer() {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [wallet, setWallet] = useState<WalletType | null>(null);
   const [productCount, setProductCount] = useState<number>(0);
 
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
@@ -107,6 +111,17 @@ export default function DashboardContainer() {
       setUser(r.data.data);
     } else {
       navigate("/login");
+    }
+    const r2: GetWalletResponse = await PerformRequest({
+      route: Endpoints.GetWalletDetails,
+      method: "POST",
+      data: {
+        token,
+        account: "customer",
+      },
+    });
+    if (r2.data && r2.data.data) {
+      setWallet(r2.data.data[0] ?? null);
     }
   };
   const getProducts = async ({
@@ -225,6 +240,7 @@ export default function DashboardContainer() {
         productCount: productCount,
         stores: stores,
         getStores: getStores,
+        wallet: wallet,
         storeCount: storeCount,
         savedItems: savedItems,
         getSavedItems: getSavedItems,

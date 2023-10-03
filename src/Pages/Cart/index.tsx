@@ -36,9 +36,9 @@ export default function Cart() {
 
   const [paystackConfig, setPaystackConfig] = useState<PaystackConfigProps>({
     reference: "",
-    amount: 0,
-    publicKey: "",
-    email: "",
+    amount: 1110,
+    publicKey: "pk_test_61f45043bcd6ef95901283089c329757a1fb776f",
+    email: "atajiboyeo@gmail.com",
     text: "",
     onSuccess: () => {},
     onClose: () => {},
