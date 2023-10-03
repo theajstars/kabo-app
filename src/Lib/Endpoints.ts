@@ -36,5 +36,6 @@ const Endpoints = {
   RemoveFromSaved: "/favourite/delete",
 
   GetBanks: "/wallet/banks",
+  UpdateBankAccount: "/account/update-bank-details",
 };
 export { Endpoints };

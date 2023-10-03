@@ -12,6 +12,8 @@ import {
   TextFieldProps,
   Button,
   Alert,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 import DefaultUserImage from "../../Assets/IMG/DefaultUserImage.png";
@@ -35,6 +37,10 @@ import {
 
 import "./styles.scss";
 
+interface BankForm {
+  number: string;
+  bankCode: string;
+}
 export default function Wallet() {
   const navigate = useNavigate();
   const userContext = useContext(AppContext);
@@ -42,7 +48,13 @@ export default function Wallet() {
   const { addToast, removeAllToasts } = useToasts();
 
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isBankUploading, setBankUploading] = useState<boolean>(false);
+
   const [isEditBankDetails, setEditBankDetails] = useState<boolean>(false);
+  const [bankForm, setBankForm] = useState<BankForm>({
+    number: "",
+    bankCode: "",
+  });
 
   const getUserBankInformation = (param: "name" | "number") => {
     if (userContext?.user) {
@@ -61,6 +73,39 @@ export default function Wallet() {
       }
     } else {
       return "Bank not added";
+    }
+  };
+
+  const UpdateBankAccount = async () => {
+    const { number, bankCode } = bankForm;
+    removeAllToasts();
+    if (number.length !== 10) {
+      addToast("Please enter a valid account number", { appearance: "error" });
+    }
+    if (bankCode.length === 0) {
+      addToast("Please select a bank!", { appearance: "error" });
+    }
+    if (bankCode.length !== 0 && number.length === 10) {
+      setBankUploading(true);
+      const r: DefaultResponse = await PerformRequest({
+        route: Endpoints.UpdateBankAccount,
+        method: "POST",
+        data: {
+          token: Cookies.get("token"),
+          bank_code: bankCode,
+          account_no: number,
+        },
+      }).catch(() => {
+        setBankUploading(false);
+      });
+      setBankUploading(false);
+      console.log(r);
+      if (r && r.data) {
+        const { status } = r.data;
+        addToast(r.data.message, {
+          appearance: status === "success" ? "success" : "error",
+        });
+      }
     }
   };
   return (
@@ -175,17 +220,73 @@ export default function Wallet() {
                   <span className="text-darker px-16 fw-500 label">
                     Bank Details
                   </span>
-                  <span className="text-darker px-16 fw-500 edit flex-row align-center pointer">
-                    Edit &nbsp;
-                    <i className="far fa-pencil" />
+                  <span
+                    className="text-darker px-16 fw-500 text-green-primary flex-row align-center pointer"
+                    onClick={() => {
+                      setEditBankDetails(!isEditBankDetails);
+                    }}
+                  >
+                    {isEditBankDetails ? (
+                      <>Cancel &nbsp;</>
+                    ) : (
+                      <>
+                        Edit &nbsp;
+                        <i className="far fa-pencil" />
+                      </>
+                    )}
                   </span>
                 </div>
-                <div className="flex-row align-center">
-                  <span className="name">{getUserBankInformation("name")}</span>
-                </div>
-                <span className="number text-blue-default">
-                  {getUserBankInformation("number")}
-                </span>
+                {isEditBankDetails ? (
+                  <>
+                    <input
+                      type="number"
+                      className="number"
+                      placeholder="Account number"
+                      maxLength={10}
+                      value={bankForm.number}
+                      onChange={(e) => {
+                        setBankForm({ ...bankForm, number: e.target.value });
+                      }}
+                    />
+                    <Select
+                      placeholder="Select Bank"
+                      label="Select Bank"
+                      size="small"
+                      value={bankForm.bankCode}
+                      onChange={(e) => {
+                        setBankForm({ ...bankForm, bankCode: e.target.value });
+                      }}
+                    >
+                      <MenuItem value="">Select Bank</MenuItem>
+                      {userContext.banks.map((bank) => {
+                        return (
+                          <MenuItem value={bank.bank_code}>
+                            {bank.bank_name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <button
+                      className="submit"
+                      type="button"
+                      onClick={() => UpdateBankAccount()}
+                      disabled={isBankUploading}
+                    >
+                      {isBankUploading ? <ProgressCircle /> : "Submit"}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex-row align-center">
+                      <span className="name">
+                        {getUserBankInformation("name")}
+                      </span>
+                    </div>
+                    <span className="text-blue-default">
+                      {getUserBankInformation("number")}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </>

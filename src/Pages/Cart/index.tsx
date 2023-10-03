@@ -31,7 +31,7 @@ export default function Cart() {
   const [shippingAddress, setShippingAddress] = useState<string>("");
   const [shippingLocation, setShippingLocation] = useState<string>("Ikeja");
   const [referenceCode, setReferenceCode] = useState<string>("");
-  const [isPaymentShowing, setPaymentShowing] = useState<boolean>(true);
+  const [isPaymentShowing, setPaymentShowing] = useState<boolean>(false);
   const paystackButtonRef = useRef<HTMLButtonElement>(null);
 
   const [paystackConfig, setPaystackConfig] = useState<PaystackConfigProps>({
@@ -234,7 +234,7 @@ export default function Cart() {
                 className="address"
                 name="address"
                 id="address"
-                placeholder="Input Address..."
+                placeholder="Additional Address Details..."
                 spellCheck={false}
                 value={shippingAddress}
                 onChange={(e) => {

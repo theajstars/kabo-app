@@ -123,6 +123,7 @@
         &:disabled {
           background-color: $White;
           color: $WhitePrimary;
+          cursor: not-allowed;
         }
         &:not(:disabled):hover {
           background-color: $BlueDefault;
@@ -146,8 +147,39 @@
         width: fit-content;
         color: $White;
       }
-      .edit {
-        color: $GreenPrimary;
+
+      .number {
+        outline: none;
+        border: 1px solid $BlueDefault;
+        box-sizing: border-box;
+        height: 40px;
+        padding: 0 20px;
+        border-radius: 5px;
+      }
+      .number::-webkit-outer-spin-button,
+      .number::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .submit {
+        height: 35px;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        color: $White;
+        border-radius: 5px;
+        background-color: $PurpleDefault;
+        cursor: pointer;
+        transition-duration: 0.12s;
+        &:disabled {
+          background-color: rgb(184, 184, 184);
+          color: $WhitePrimary;
+          cursor: not-allowed;
+        }
+        &:not(:disabled):hover {
+          background-color: $BlueDefault;
+        }
       }
     }
   }
