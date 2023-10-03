@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
 import { motion } from "framer-motion";
+import CopyToClipboard from "react-copy-to-clipboard";
 import {
   Container,
   TextField,
@@ -113,6 +114,34 @@ export default function Wallet() {
                   <Alert severity="info">No wallet information found!</Alert>
                 </center>
               )}
+            </div>
+            <div className="flex-row width-100 justify-between actions">
+              <CopyToClipboard
+                text={
+                  userContext.wallet?.virtual_account.virtual_account_no ?? ""
+                }
+                onCopy={() => {
+                  removeAllToasts();
+                  addToast("Account copied to clipboard!", {
+                    appearance: "success",
+                  });
+                }}
+              >
+                <div className="flex-col justify-between bank">
+                  <span className="text-darker px-16 fw-500 label">
+                    Virtual Account
+                  </span>
+                  <div className="flex-row align-center">
+                    <span className="icon px-20 flex-row align-center justify-center">
+                      <i className="far fa-university" />
+                    </span>
+                    &nbsp; &nbsp;
+                    <span className="name">Access Bank</span>
+                  </div>
+                  <span className="account">Ajiboye Oluwaferanmi</span>
+                  <span className="number text-blue-default">1219883420</span>
+                </div>
+              </CopyToClipboard>
             </div>
           </>
         ) : (
