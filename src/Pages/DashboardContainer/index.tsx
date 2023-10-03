@@ -12,6 +12,7 @@ import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
 
 import {
+  Bank,
   Cart as CartType,
   Category,
   Product,
@@ -25,6 +26,7 @@ import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
 import {
+  GetBanksResponse,
   GetCartResponse,
   GetCategoriesResponse,
   GetProductsResponse,
@@ -62,6 +64,7 @@ interface GetStoresProps {
 }
 interface AppContextProps {
   user: User | null;
+  banks: Bank[] | [];
   logout: () => void;
   getUser: () => void;
   cart: CartType | null;
@@ -95,6 +98,7 @@ export default function DashboardContainer() {
 
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [savedItemsCount, setSavedItemsCount] = useState<number>(0);
+  const [banks, setBanks] = useState<Bank[]>([]);
 
   const getUser = async () => {
     const token = Cookies.get("token");
@@ -160,6 +164,18 @@ export default function DashboardContainer() {
       setCategories(r.data.data ?? []);
     }
   };
+  const getBanks = async () => {
+    const token = Cookies.get("token");
+    const r: GetBanksResponse = await PerformRequest({
+      route: Endpoints.GetBanks,
+      method: "POST",
+      data: { token: token },
+    });
+    console.log(r);
+    if (r.data && r.data.status === "success") {
+      setBanks(r.data.data ?? []);
+    }
+  };
   const getCart = async () => {
     const token = Cookies.get("token");
     const r: GetCartResponse = await PerformRequest({
@@ -215,6 +231,7 @@ export default function DashboardContainer() {
   useEffect(() => {
     getUser();
     getCart();
+    getBanks();
     getSavedItems({ page: 1, limit: 15 });
     getCategories();
     getProducts({ page: 1, limit: 15 });
@@ -245,6 +262,7 @@ export default function DashboardContainer() {
         savedItems: savedItems,
         getSavedItems: getSavedItems,
         savedItemsCount: savedItemsCount,
+        banks: banks,
       }}
     >
       <Navbar />

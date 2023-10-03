@@ -34,5 +34,7 @@ const Endpoints = {
   GetSavedItems: "/favourite/list",
   AddToSaved: "/favourite/add",
   RemoveFromSaved: "/favourite/delete",
+
+  GetBanks: "/wallet/banks",
 };
 export { Endpoints };

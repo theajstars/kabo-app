@@ -34,14 +34,7 @@ import {
 } from "../../Lib/Methods";
 
 import "./styles.scss";
-interface ProfileFormProps {
-  firstName: string;
-  lastName: string;
-  address: string;
-  phone: string;
-  email: string;
-  photo: string;
-}
+
 export default function Wallet() {
   const navigate = useNavigate();
   const userContext = useContext(AppContext);
@@ -49,14 +42,26 @@ export default function Wallet() {
   const { addToast, removeAllToasts } = useToasts();
 
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isEditBankDetails, setEditBankDetails] = useState<boolean>(false);
 
-  const textFieldProps: TextFieldProps = {
-    variant: "outlined",
-    size: "small",
-    disabled: isLoading,
-    sx: {
-      mt: "30px",
-    },
+  const getUserBankInformation = (param: "name" | "number") => {
+    if (userContext?.user) {
+      const { bank_name, account_no } = userContext.user.bank_details;
+      switch (param) {
+        case "name":
+          return bank_name && bank_name.length > 0
+            ? bank_name
+            : "Bank not added";
+          break;
+        case "number":
+          return account_no && account_no.length > 0
+            ? account_no
+            : "Bank not added";
+          break;
+      }
+    } else {
+      return "Bank not added";
+    }
   };
   return (
     <Container maxWidth="lg">
@@ -129,7 +134,7 @@ export default function Wallet() {
               >
                 <div className="flex-col justify-between bank">
                   <span className="text-darker px-16 fw-500 label">
-                    Virtual Account
+                    Virtual Account Details
                   </span>
                   <div className="flex-row align-center">
                     <span className="icon px-20 flex-row align-center justify-center">
@@ -164,6 +169,23 @@ export default function Wallet() {
                   className="input"
                 />
                 <button className="pay">Continue</button>
+              </div>
+              <div className="flex-col justify-between user-bank">
+                <div className="flex-row width-100 justify-between align-center">
+                  <span className="text-darker px-16 fw-500 label">
+                    Bank Details
+                  </span>
+                  <span className="text-darker px-16 fw-500 edit flex-row align-center pointer">
+                    Edit &nbsp;
+                    <i className="far fa-pencil" />
+                  </span>
+                </div>
+                <div className="flex-row align-center">
+                  <span className="name">{getUserBankInformation("name")}</span>
+                </div>
+                <span className="number text-blue-default">
+                  {getUserBankInformation("number")}
+                </span>
               </div>
             </div>
           </>

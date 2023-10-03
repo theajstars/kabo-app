@@ -129,6 +129,27 @@
         }
       }
     }
+    .user-bank {
+      box-sizing: border-box;
+      height: 230px;
+      width: 330px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+      transition-duration: 0.12s;
+
+      .label {
+        background-color: $BlueDefault;
+        padding: 2px 10px;
+        font-size: 15px;
+        border-radius: 3px;
+        width: fit-content;
+        color: $White;
+      }
+      .edit {
+        color: $GreenPrimary;
+      }
+    }
   }
   @media screen and (max-width: 800px) {
     & {
