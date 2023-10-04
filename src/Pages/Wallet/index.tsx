@@ -9,7 +9,8 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import {
   Container,
   Grid,
-  TextFieldProps,
+  FormControl,
+  InputLabel,
   Button,
   Alert,
   Select,
@@ -252,27 +253,31 @@ export default function Wallet() {
                           });
                         }}
                       />
-                      <Select
-                        placeholder="Select Bank"
-                        label="Select Bank"
-                        size="small"
-                        value={bankForm.bankCode}
-                        onChange={(e) => {
-                          setBankForm({
-                            ...bankForm,
-                            bankCode: e.target.value,
-                          });
-                        }}
-                      >
-                        <MenuItem value="">Select Bank</MenuItem>
-                        {userContext.banks.map((bank) => {
-                          return (
-                            <MenuItem value={bank.bank_code}>
-                              {bank.bank_name}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
+                      <FormControl fullWidth size="small">
+                        <InputLabel id="demo-simple-select-label">
+                          Select Bank
+                        </InputLabel>
+                        <Select
+                          label="Select Bank"
+                          placeholder="Select Bank"
+                          value={bankForm.bankCode}
+                          onChange={(e) => {
+                            setBankForm({
+                              ...bankForm,
+                              bankCode: e.target.value,
+                            });
+                          }}
+                        >
+                          <MenuItem value="">None</MenuItem>
+                          {userContext.banks.map((bank) => {
+                            return (
+                              <MenuItem value={bank.bank_code}>
+                                {bank.bank_name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
                       <button
                         className="submit"
                         type="button"
