@@ -42,11 +42,6 @@ export default function Dashboard() {
     }
   };
   useEffect(() => {
-    if (userContext && userContext.products) {
-      setProducts(userContext.products);
-    }
-  }, [userContext]);
-  useEffect(() => {
     paginateProducts();
   }, [page]);
   const getProductByCategory = async () => {
@@ -75,7 +70,12 @@ export default function Dashboard() {
       }).catch(() => {
         setLoading(false);
       });
-      if (r.data && r.data.status === "success") {
+      if (
+        r.data &&
+        r.data.status === "success" &&
+        r.data.data &&
+        r.data.data.length > 0
+      ) {
         setProducts(r.data.data);
       } else {
         if (r.data && r.data.status === "failed") {
@@ -162,7 +162,9 @@ export default function Dashboard() {
             </div>
           </div>
           <br />
-          {products.length === 0 && !isLoading ? (
+          {products.length === 0 &&
+          userContext.products.length === 0 &&
+          !isLoading ? (
             <Alert severity="info">No Products found!</Alert>
           ) : (
             <>
@@ -172,13 +174,15 @@ export default function Dashboard() {
                 alignItems="center"
                 justifyContent="center"
               >
-                {products.map((product, index) => {
-                  return (
-                    <Grid item>
-                      <ProductCard product={product} disabled={isLoading} />
-                    </Grid>
-                  );
-                })}
+                {(products.length > 0 ? products : userContext.products).map(
+                  (product, index) => {
+                    return (
+                      <Grid item>
+                        <ProductCard product={product} disabled={isLoading} />
+                      </Grid>
+                    );
+                  }
+                )}
               </Grid>
               <br />
               <br />

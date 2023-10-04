@@ -78,7 +78,9 @@ export default function ProductCard({
           id: cartProduct?.id,
           quantity: 1,
         },
-      }).catch(() => [setLoading(false)]);
+      }).catch(() => {
+        setLoading(false);
+      });
       setLoading(false);
       if (r && r.data.status === "success") {
         addToast("Product Added", { appearance: "success" });
@@ -101,7 +103,9 @@ export default function ProductCard({
           id: product.id,
           quantity: 1,
         },
-      }).catch(() => [setLoading(false)]);
+      }).catch(() => {
+        setLoading(false);
+      });
       setLoading(false);
       if (r && r.data.status === "success") {
         addToast("Product Added", { appearance: "success" });
@@ -132,7 +136,9 @@ export default function ProductCard({
           poid: [poid],
           quantity: getProductInCart() === 1 ? [0] : [getProductInCart() - 1],
         },
-      }).catch(() => [setLoading(false)]);
+      }).catch(() => {
+        setLoading(false);
+      });
       setLoading(false);
 
       if (r && r.data.status === "success") {
@@ -163,7 +169,9 @@ export default function ProductCard({
           poid: [poid],
           quantity: getProductInCart() === 1 ? [0] : [getProductInCart() - 1],
         },
-      }).catch(() => [setLoading(false)]);
+      }).catch(() => {
+        setLoading(false);
+      });
       setLoading(false);
 
       if (r && r.data.status === "success") {
@@ -190,7 +198,9 @@ export default function ProductCard({
         token,
         poid: [poid],
       },
-    }).catch(() => [setLoading(false)]);
+    }).catch(() => {
+      setLoading(false);
+    });
 
     if (r && r.data.status === "success") {
       addToast("Product Removed", { appearance: "success" });
