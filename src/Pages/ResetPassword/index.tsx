@@ -17,7 +17,7 @@ import { appConfig } from "../../Lib/appConfig";
 
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
-import { LoginResponse } from "../../Lib/Responses";
+import { DefaultResponse, LoginResponse } from "../../Lib/Responses";
 import { validateEmail } from "../../Lib/Methods";
 import ProgressCircle from "../../Misc/ProgressCircle";
 
@@ -26,45 +26,31 @@ import Logo from "../../Assets/IMG/Logo.png";
 import "./styles.scss";
 interface FormValues {
   email: string;
-  password: string;
-  showPassword: boolean;
 }
-export default function Login() {
+export default function ResetPassword() {
   const navigate = useNavigate();
   const { addToast, removeAllToasts } = useToasts();
   const [isLoading, setLoading] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<FormValues>({
     email: "",
-    password: "",
-    showPassword: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     removeAllToasts();
     e.preventDefault();
-    const { email, password } = formValues;
+    const { email } = formValues;
     const isEmailValid = validateEmail(email);
-    if (isEmailValid && password.length > 4) {
+    if (isEmailValid) {
       setLoading(true);
-      const r: LoginResponse = await PerformRequest({
+      const r: DefaultResponse = await PerformRequest({
         method: "POST",
-        data: { email, passcode: password },
-        route: Endpoints.LoginUser,
+        data: { email },
+        route: Endpoints.RecoverAccount,
       }).catch(() => setLoading(false));
       setLoading(false);
       if (r && r.data.status === "success") {
         console.log(r.data);
-        Cookies.set("token", r.data.token);
-        const storeIdObject = r.data?.data?.store_id;
-        if (storeIdObject) {
-          const values = Object.values(storeIdObject);
-          const id =
-            values.filter((v) => v !== null && v !== undefined)[0] ?? "";
-          Cookies.set("user_store_id", id);
-        }
-
-        addToast("Log in successful", { appearance: "success" });
-        navigate("/dashboard");
+        addToast(r.data.message, { appearance: "success" });
       } else {
         addToast(r.data.message, { appearance: "error" });
       }
@@ -89,15 +75,15 @@ export default function Login() {
             <img src={Logo} alt="" className="logo" />
           </Box>
 
-          <Box sx={{ mb: 6 }}>
+          <Box sx={{ mb: 2 }}>
             <Typography
               variant="h5"
               sx={{ fontWeight: 600, marginBottom: 1.5 }}
             >
-              Welcome to {appConfig.appName}!
+              Recover your account
             </Typography>
             <Typography variant="body2">
-              Please sign-in to your account and start the adventure
+              Please provide your email address
             </Typography>
           </Box>
 
@@ -116,48 +102,6 @@ export default function Login() {
             />
             <br />
             <br />
-            <TextField
-              autoFocus
-              fullWidth
-              id="password"
-              label="password"
-              size="small"
-              type={formValues.showPassword ? "text" : "password"}
-              value={formValues.password}
-              onChange={(e) =>
-                setFormValues({ ...formValues, password: e.target.value })
-              }
-            />
-
-            <br />
-            <small
-              className="px-12 pointer text-dark"
-              onClick={() => {
-                setFormValues({
-                  ...formValues,
-                  showPassword: !formValues.showPassword,
-                });
-              }}
-            >
-              {formValues.showPassword ? "Hide" : "Show"} Password &nbsp;
-              {formValues.showPassword ? (
-                <i className="far fa-eye-slash" />
-              ) : (
-                <i className="far fa-eye" />
-              )}
-            </small>
-            <Box
-              sx={{
-                mt: 2,
-                mb: 2,
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              <FormControlLabel control={<Checkbox />} label="Remember Me" />
-            </Box>
 
             <Button
               fullWidth
@@ -171,7 +115,7 @@ export default function Login() {
               variant="contained"
               type="submit"
             >
-              {isLoading ? <ProgressCircle /> : "Login"}
+              {isLoading ? <ProgressCircle /> : "Reset"}
             </Button>
           </form>
           <br />
@@ -185,8 +129,8 @@ export default function Login() {
       </div>
       <br />
       <div className="flex-row align-center justify-between">
-        <Link className="text-blue-default" to="/reset">
-          Forgot Password
+        <Link className="text-blue-default" to="/login">
+          Back to Login
         </Link>
       </div>
     </div>

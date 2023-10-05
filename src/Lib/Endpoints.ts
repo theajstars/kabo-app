@@ -16,6 +16,7 @@ const Endpoints = {
 
   RegisterUser: "/account/register",
   LoginUser: "/account/login",
+  RecoverAccount: "/account/recover-account",
   GetUserDetails: "/account/details",
   UpdateAccount: "/account/update-profile",
 

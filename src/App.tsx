@@ -16,6 +16,7 @@ import SingleStore from "./Pages/SingleStore";
 import SavedItems from "./Pages/SavedItems";
 import Profile from "./Pages/Profile";
 import Wallet from "./Pages/Wallet";
+import ResetPassword from "./Pages/ResetPassword";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reset" element={<ResetPassword />} />
           <Route path="/dashboard" element={<DashboardContainer />}>
             <Route index element={<Dashboard />} />
             <Route path="/dashboard/products" element={<Products />} />
