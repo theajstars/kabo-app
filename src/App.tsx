@@ -17,6 +17,7 @@ import SavedItems from "./Pages/SavedItems";
 import Profile from "./Pages/Profile";
 import Wallet from "./Pages/Wallet";
 import ResetPassword from "./Pages/ResetPassword";
+import Error404 from "./Pages/Error404";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/dashboard/stores" element={<Stores />} />
             <Route path="/dashboard/store/:storeID" element={<SingleStore />} />
           </Route>
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </Router>
     </ToastProvider>
