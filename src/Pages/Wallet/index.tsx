@@ -31,6 +31,10 @@ interface BankForm {
   number: string;
   bankCode: string;
 }
+interface WalletTransferForm {
+  amount: string;
+  walletID: string;
+}
 export default function Wallet() {
   const navigate = useNavigate();
   const userContext = useContext(AppContext);
@@ -45,6 +49,11 @@ export default function Wallet() {
     number: "",
     bankCode: "",
   });
+  const [walletTransferForm, setWalletTransferForm] =
+    useState<WalletTransferForm>({
+      amount: "",
+      walletID: "",
+    });
 
   const getUserBankInformation = (param: "name" | "number") => {
     if (userContext?.user) {
@@ -96,6 +105,34 @@ export default function Wallet() {
           appearance: status === "success" ? "success" : "error",
         });
       }
+    }
+  };
+
+  const PerformWalletTransfer = async () => {
+    const { amount, walletID } = walletTransferForm;
+    removeAllToasts();
+    if (walletID.length === 0) {
+      addToast("Please enter a valid Wallet ID", { appearance: "error" });
+    }
+    if (isNaN(parseInt(amount)) || parseInt(amount) < 100) {
+      addToast("Minimum transfer amount is ₦100", { appearance: "error" });
+    }
+    if (parseInt(amount) >= 100 && walletID.length > 0) {
+      setLoading(true);
+      const r: DefaultResponse = await PerformRequest({
+        route: Endpoints.ProcessWalletTransfer,
+        data: { wallet_id: walletID, amount, token: Cookies.get("token") },
+        method: "POST",
+      }).catch(() => {
+        setLoading(false);
+      });
+      setLoading(false);
+      const status = r.data && r.data.status ? r.data.status : "error";
+      addToast(r.data.message, {
+        appearance: status === "success" ? "success" : "error",
+      });
+
+      console.log(r);
     }
   };
   return (
@@ -207,13 +244,35 @@ export default function Wallet() {
                     type="text"
                     placeholder="Input Wallet ID"
                     className="input"
+                    value={walletTransferForm.walletID}
+                    onChange={(e) => {
+                      setWalletTransferForm({
+                        ...walletTransferForm,
+                        walletID: e.target.value,
+                      });
+                    }}
                   />
                   <input
                     type="number"
+                    value={walletTransferForm.amount}
+                    onChange={(e) => {
+                      setWalletTransferForm({
+                        ...walletTransferForm,
+                        amount: e.target.value,
+                      });
+                    }}
                     placeholder="Enter Amount"
                     className="input"
                   />
-                  <button className="pay">Continue</button>
+                  <button
+                    className="pay"
+                    onClick={() => {
+                      PerformWalletTransfer();
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <ProgressCircle /> : "Continue"}
+                  </button>
                 </div>
               </Grid>
               <Grid item className="actions-grid-item">

@@ -30,6 +30,7 @@ const Endpoints = {
   AddShippingInformation: "/order/shipping",
   CheckoutCart: "/order/checkout",
   GetWalletDetails: "/wallet/details",
+  ProcessWalletTransfer: "/wallet/transfer",
 
   GetSavedItems: "/favourite/list",
   AddToSaved: "/favourite/add",
