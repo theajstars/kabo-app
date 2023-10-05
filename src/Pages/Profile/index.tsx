@@ -294,8 +294,8 @@ export default function Profile() {
                 <TextField
                   name="address"
                   value={profileForm.address}
-                  placeholder="Store Address"
-                  label="Store Address"
+                  placeholder="Address"
+                  label="Address"
                   onChange={handleFormChange}
                   {...textFieldProps}
                   fullWidth
