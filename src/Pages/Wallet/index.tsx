@@ -221,10 +221,19 @@ export default function Wallet() {
                         <i className="far fa-university" />
                       </span>
                       &nbsp; &nbsp;
-                      <span className="name">Access Bank</span>
+                      <span className="name">
+                        {
+                          userContext.wallet?.virtual_account
+                            .virtual_account_bank_name
+                        }
+                      </span>
                     </div>
-                    <span className="account">Ajiboye Oluwaferanmi</span>
-                    <span className="number text-blue-default">1219883420</span>
+                    <span className="account">
+                      {userContext.wallet?.virtual_account.virtual_account_name}
+                    </span>
+                    <span className="number text-blue-default">
+                      {userContext.wallet?.virtual_account.virtual_account_no}
+                    </span>
                   </div>
                 </CopyToClipboard>
               </Grid>
