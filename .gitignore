@@ -10,6 +10,7 @@
 
 # production
 /build
+/app_build.zip
 
 # misc
 .DS_Store
