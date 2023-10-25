@@ -28,6 +28,8 @@ export default function Cart() {
 
   const [isLoading, setLoading] = useState<boolean>(false);
 
+  const [isCheckoutComplete, setCheckoutComplete] = useState<boolean>(false);
+
   const [shippingAddress, setShippingAddress] = useState<string>("");
   const [shippingLocation, setShippingLocation] = useState<string>("Ikeja");
   const [referenceCode, setReferenceCode] = useState<string>("");
@@ -112,9 +114,31 @@ export default function Cart() {
       });
       console.log(r);
       if (r.data && r.data.status == "success") {
+        setCheckoutComplete(true);
         setReferenceCode(r.data.reference_code);
       }
       setLoading(false);
+    }
+  };
+  const MakePayment = async () => {
+    removeAllToasts();
+    const r: DefaultResponse = await PerformRequest({
+      method: "POST",
+      route: Endpoints.MakeOrderPayment,
+      data: {
+        token: Cookies.get("token"),
+        reference_code: referenceCode,
+        channel: "wallet",
+      },
+    });
+    console.log(r);
+    const { status, message } = r.data;
+    if (status && message) {
+      addToast(message, {
+        appearance: status === "success" ? "success" : "error",
+      });
+    } else {
+      addToast("An error occurred!", { appearance: "error" });
     }
   };
   const generatePaystackConfig = async () => {
@@ -244,10 +268,14 @@ export default function Cart() {
               <Button
                 disabled={isLoading}
                 onClick={() => {
-                  if (isShippingAddressPresent) {
-                    CheckoutCart();
+                  if (isCheckoutComplete) {
+                    MakePayment();
                   } else {
-                    AddShipping();
+                    if (isShippingAddressPresent) {
+                      CheckoutCart();
+                    } else {
+                      AddShipping();
+                    }
                   }
                 }}
                 variant="contained"
