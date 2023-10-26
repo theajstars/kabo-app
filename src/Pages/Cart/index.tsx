@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from "react";
 
-import { Container, Alert, Divider, Button } from "@mui/material";
+import { Container, Alert, Divider, Button, Chip } from "@mui/material";
 import Cookies from "js-cookie";
 import { useToasts } from "react-toast-notifications";
 import { PaystackConsumer } from "react-paystack";
@@ -26,6 +26,9 @@ export default function Cart() {
   const [isProductModalVisible, setProductModalVisible] =
     useState<boolean>(false);
 
+  const walletBalance = userContext?.wallet
+    ? userContext.wallet.available_balance
+    : 0;
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const [isCheckoutComplete, setCheckoutComplete] = useState<boolean>(false);
@@ -233,6 +236,20 @@ export default function Cart() {
                   ₦{getFinancialValueFromNumeric(userContext.cart.amount.total)}
                 </span>
               </div>
+              <div className="flex-row align-center width-100 justify-start">
+                <span className="px-14">Current Wallet Balance: &nbsp;</span>
+                <Chip
+                  label={walletBalance}
+                  variant="outlined"
+                  color={
+                    userContext.cart.amount.total > walletBalance
+                      ? "secondary"
+                      : "success"
+                  }
+                />
+              </div>
+              <br />
+              <Divider sx={{ width: "100%" }} />
               <br />
               <div className="flex-row width-100">
                 <span className="px-13 text-dark fw-500">Address Details</span>
@@ -288,6 +305,8 @@ export default function Cart() {
               >
                 {isLoading ? (
                   <ProgressCircle />
+                ) : isCheckoutComplete ? (
+                  "Pay"
                 ) : isShippingAddressPresent ? (
                   "Checkout"
                 ) : (
