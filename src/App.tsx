@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { ToastProvider } from "react-toast-notifications";
+import { Helmet } from "react-helmet";
 
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
@@ -22,6 +23,12 @@ import Error404 from "./Pages/Error404";
 function App() {
   return (
     <ToastProvider autoDismiss={true}>
+      <Helmet>
+        <script
+          src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+          type="text/javascript"
+        />
+      </Helmet>
       <Router>
         <Routes>
           <Route index element={<Login />} />
