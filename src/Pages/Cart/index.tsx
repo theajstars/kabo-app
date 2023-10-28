@@ -4,6 +4,8 @@ import { Container, Alert, Divider, Button, Chip } from "@mui/material";
 import Cookies from "js-cookie";
 import { useToasts } from "react-toast-notifications";
 import { PaystackConsumer } from "react-paystack";
+import $ from "jquery";
+import { Helmet } from "react-helmet";
 
 import { Endpoints } from "../../Lib/Endpoints";
 import { getFinancialValueFromNumeric } from "../../Lib/Methods";
@@ -167,6 +169,15 @@ export default function Cart() {
     }
   };
 
+  const connectToMoiPayWay = async () => {
+    const selector: any = $(".custom_button");
+    selector.MPWcheckout({
+      order_reference_code: "416984926944",
+      onClose: function () {
+        window.location.reload();
+      },
+    });
+  };
   return (
     <Container
       maxWidth="lg"
@@ -177,6 +188,12 @@ export default function Cart() {
         justifyContent: "center",
       }}
     >
+      <Helmet>
+        <script
+          src="https://checkout.moipayway.com/inline/MPWcheckout.js"
+          type="text/javascript"
+        />
+      </Helmet>
       {userContext && userContext.cart ? (
         <div className="cart-container flex-col align-center justify-between">
           <div className="flex-row width-100">
@@ -313,6 +330,7 @@ export default function Cart() {
                   "Submit"
                 )}
               </Button>
+              <Button onClick={connectToMoiPayWay}>Do Stuff</Button>
               {isPaymentShowing && (
                 <PaystackConsumer {...paystackConfig}>
                   {({ initializePayment }) => (

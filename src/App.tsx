@@ -25,7 +25,7 @@ function App() {
     <ToastProvider autoDismiss={true}>
       <Helmet>
         <script
-          src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+          src="https://checkout.moipayway.com/inline/MPWcheckout.js"
           type="text/javascript"
         />
       </Helmet>
