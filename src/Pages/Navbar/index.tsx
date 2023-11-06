@@ -28,6 +28,7 @@ export default function Navbar() {
   const userContext = useContext(AppContext);
 
   const cartProducts = userContext?.cart;
+  console.log(cartProducts);
   const screenWidth = window.innerWidth;
 
   return (

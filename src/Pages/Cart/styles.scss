@@ -72,6 +72,7 @@
       border-radius: 5px;
     }
   }
+
   @media screen and (max-width: 550px) {
     & {
       .products {
@@ -135,5 +136,20 @@
         }
       }
     }
+  }
+}
+.payment-modal {
+}
+.moipayway {
+  width: 600px;
+  height: 700px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -350px;
+  margin-left: -300px;
+  @media screen and (max-width: 700px) {
+    width: 90vw;
+    margin-left: -45vw;
   }
 }

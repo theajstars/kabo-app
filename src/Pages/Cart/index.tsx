@@ -1,6 +1,6 @@
 import { useState, useRef, useContext, useEffect } from "react";
 
-import { Container, Alert, Divider, Button, Chip } from "@mui/material";
+import { Container, Alert, Divider, Button, Chip, Modal } from "@mui/material";
 import Cookies from "js-cookie";
 import { useToasts } from "react-toast-notifications";
 import { PaystackConsumer } from "react-paystack";
@@ -32,6 +32,7 @@ export default function Cart() {
     ? userContext.wallet.available_balance
     : 0;
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isPaymentModalShow, setShowPaymentModal] = useState<boolean>(false);
 
   const [isCheckoutComplete, setCheckoutComplete] = useState<boolean>(false);
 
@@ -139,7 +140,8 @@ export default function Cart() {
     console.log(r);
     const { status, message } = r.data;
     if (status && message) {
-      window.open(`https://checkout.moipayway.com/${referenceCode}`);
+      setShowPaymentModal(true);
+
       console.log(`https://checkout.moipayway.com/${referenceCode}`);
       addToast(message, {
         appearance: status === "success" ? "success" : "error",
@@ -194,6 +196,19 @@ export default function Cart() {
         justifyContent: "center",
       }}
     >
+      <Modal
+        open={isPaymentModalShow}
+        onClose={() => {
+          setShowPaymentModal(false);
+        }}
+      >
+        <div className="payment-modal">
+          <iframe
+            className="moipayway"
+            src={`https://checkout.moipayway.com/${referenceCode}`}
+          ></iframe>
+        </div>
+      </Modal>
       {userContext && userContext.cart ? (
         <div className="cart-container flex-col align-center justify-between">
           <div className="flex-row width-100">
