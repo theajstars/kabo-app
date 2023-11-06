@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 
 import { Container, Alert, Divider, Button, Chip } from "@mui/material";
 import Cookies from "js-cookie";
@@ -139,6 +139,8 @@ export default function Cart() {
     console.log(r);
     const { status, message } = r.data;
     if (status && message) {
+      window.open(`https://checkout.moipayway.com/${referenceCode}`);
+      console.log(`https://checkout.moipayway.com/${referenceCode}`);
       addToast(message, {
         appearance: status === "success" ? "success" : "error",
       });
@@ -170,7 +172,11 @@ export default function Cart() {
   };
 
   const connectToMoiPayWay = async () => {
-    const selector: any = $(".custom_button");
+    type mpTypeProps = { order_reference_code: string; onClose: () => void };
+    type mpType = {
+      MPWcheckout: ({ order_reference_code, onClose }: mpTypeProps) => void;
+    };
+    const selector = $(".custom_button") as unknown as mpType;
     selector.MPWcheckout({
       order_reference_code: "416984926944",
       onClose: function () {
@@ -188,12 +194,6 @@ export default function Cart() {
         justifyContent: "center",
       }}
     >
-      <Helmet>
-        <script
-          src="https://checkout.moipayway.com/inline/MPWcheckout.js"
-          type="text/javascript"
-        />
-      </Helmet>
       {userContext && userContext.cart ? (
         <div className="cart-container flex-col align-center justify-between">
           <div className="flex-row width-100">
@@ -330,7 +330,10 @@ export default function Cart() {
                   "Submit"
                 )}
               </Button>
-              <Button onClick={connectToMoiPayWay}>Do Stuff</Button>
+
+              <Button onClick={connectToMoiPayWay} className="custom_button">
+                Do Stuff
+              </Button>
               {isPaymentShowing && (
                 <PaystackConsumer {...paystackConfig}>
                   {({ initializePayment }) => (

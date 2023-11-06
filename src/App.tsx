@@ -23,12 +23,6 @@ import Error404 from "./Pages/Error404";
 function App() {
   return (
     <ToastProvider autoDismiss={true}>
-      <Helmet>
-        <script
-          src="https://checkout.moipayway.com/inline/MPWcheckout.js"
-          type="text/javascript"
-        />
-      </Helmet>
       <Router>
         <Routes>
           <Route index element={<Login />} />
