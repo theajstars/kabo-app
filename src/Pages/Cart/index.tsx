@@ -140,7 +140,7 @@ export default function Cart() {
       data: {
         token: Cookies.get("token"),
         reference_code: referenceCode,
-        channel: "wallet",
+        channel: selectedMethod === "wallet" ? "wallet" : "",
       },
     }).catch(() => {
       setLoading(false);
@@ -158,7 +158,9 @@ export default function Cart() {
         });
       }
     } else {
-      addToast("An error occurred!", { appearance: "error" });
+      addToast(message ?? "An error occurred!", {
+        appearance: "error",
+      });
     }
   };
   const generatePaystackConfig = async () => {
