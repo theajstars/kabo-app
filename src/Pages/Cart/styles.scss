@@ -73,6 +73,20 @@
     }
   }
 
+  .channels {
+    .item {
+      height: 45px;
+      width: 150px;
+      border-radius: 5px;
+      border: 1px solid transparent;
+      img {
+        height: 30px;
+      }
+    }
+    .item-selected {
+      background-color: rgba(207, 207, 207, 0.3);
+    }
+  }
   @media screen and (max-width: 550px) {
     & {
       .products {

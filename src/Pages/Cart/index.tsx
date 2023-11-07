@@ -13,6 +13,7 @@ import { PerformRequest } from "../../Lib/PerformRequest";
 import { PaystackConfigProps, Product } from "../../Lib/Types";
 
 import DefaultImage from "../../Assets/IMG/DefaultProductImage.png";
+import MoiPayWayIcon from "../../Assets/IMG/moipayway.png";
 
 import "./styles.scss";
 import { CheckoutResponse, DefaultResponse } from "../../Lib/Responses";
@@ -35,6 +36,10 @@ export default function Cart() {
   const [isPaymentModalShow, setShowPaymentModal] = useState<boolean>(false);
 
   const [isCheckoutComplete, setCheckoutComplete] = useState<boolean>(false);
+
+  const [selectedMethod, setSelectedMethod] = useState<"moipayway" | "wallet">(
+    "wallet"
+  );
 
   const [shippingAddress, setShippingAddress] = useState<string>("");
   const [shippingLocation, setShippingLocation] = useState<string>("Ikeja");
@@ -128,6 +133,7 @@ export default function Cart() {
   };
   const MakePayment = async () => {
     removeAllToasts();
+    setLoading(true);
     const r: DefaultResponse = await PerformRequest({
       method: "POST",
       route: Endpoints.MakeOrderPayment,
@@ -136,16 +142,21 @@ export default function Cart() {
         reference_code: referenceCode,
         channel: "wallet",
       },
+    }).catch(() => {
+      setLoading(false);
     });
+    setLoading(false);
     console.log(r);
     const { status, message } = r.data;
-    if (status && message) {
-      setShowPaymentModal(true);
-
-      console.log(`https://checkout.moipayway.com/${referenceCode}`);
-      addToast(message, {
-        appearance: status === "success" ? "success" : "error",
-      });
+    if (status && status === "success" && message) {
+      if (selectedMethod === "moipayway") {
+        setShowPaymentModal(true);
+      } else {
+        window.location.reload();
+        addToast(message, {
+          appearance: status === "success" ? "success" : "error",
+        });
+      }
     } else {
       addToast("An error occurred!", { appearance: "error" });
     }
@@ -314,6 +325,36 @@ export default function Cart() {
                   setShippingAddress(e.target.value);
                 }}
               />
+              {isCheckoutComplete && (
+                <div className="flex-col align-center">
+                  <br />
+                  <span className="px-14">Select Payment Channel</span>
+                  <br />
+                  <div className="flex-row channels">
+                    <span
+                      className={`item align-center justify-center flex-row pointer ${
+                        selectedMethod === "moipayway" ? "item-selected" : ""
+                      }`}
+                      onClick={() => setSelectedMethod("moipayway")}
+                    >
+                      <img src={MoiPayWayIcon} alt="" />
+                      <span className="px-15">MoiPayWay</span>
+                    </span>
+                    &nbsp;
+                    <span
+                      className={`item align-center justify-center flex-row pointer ${
+                        selectedMethod === "wallet" ? "item-selected" : ""
+                      }`}
+                      onClick={() => setSelectedMethod("wallet")}
+                    >
+                      <i className="far fa-wallet" />
+                      &nbsp;
+                      <span className="px-15">Wallet</span>
+                    </span>
+                  </div>
+                  <br />
+                </div>
+              )}
               <Button
                 disabled={isLoading}
                 onClick={() => {
@@ -346,9 +387,9 @@ export default function Cart() {
                 )}
               </Button>
 
-              <Button onClick={connectToMoiPayWay} className="custom_button">
+              {/* <Button onClick={connectToMoiPayWay} className="custom_button">
                 Do Stuff
-              </Button>
+              </Button> */}
               {isPaymentShowing && (
                 <PaystackConsumer {...paystackConfig}>
                   {({ initializePayment }) => (
