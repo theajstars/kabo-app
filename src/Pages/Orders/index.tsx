@@ -58,8 +58,8 @@ export default function Orders() {
       data: {
         token: token,
         account: "customer",
-        page: paginationModel.page,
-        limit: paginationModel.pageSize,
+        // page: paginationModel.page,
+        // limit: paginationModel.pageSize,
         payment_status: paymentStatus,
         order_status: orderStatus,
       },
@@ -320,19 +320,38 @@ export default function Orders() {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  <TableCell>Time</TableCell>
+                                  <TableCell>
+                                    <span>
+                                      {currentOrder.payment_timestamp}
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
                                   <TableCell>Reference Code</TableCell>
                                   <TableCell>
                                     <span>{currentOrder.reference_code}</span>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  <TableCell>Reference Code</TableCell>
+                                  <TableCell>
+                                    <span>
+                                      {currentOrder.shipping[0].address}
+                                    </span>
+                                    <span>
+                                      {currentOrder.shipping[0].details}
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                                {/* <TableRow>
                                   <TableCell>Store</TableCell>
                                   <TableCell>
                                     {currentOrder.store.map((s) => {
                                       return <span>{s.name}&nbsp;&nbsp;</span>;
                                     })}
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
                               </TableBody>
                             </Table>
                           </TableContainer>

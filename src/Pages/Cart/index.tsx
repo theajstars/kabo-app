@@ -225,22 +225,26 @@ export default function Cart() {
       {userContext && userContext.cart ? (
         <div className="cart-container flex-col align-center justify-between">
           <div className="flex-row width-100">
-            <span className="px-20 fw-600 text-dark ">Cart</span>
+            <span className="px-20 fw-600 text-dark ">
+              {isCheckoutComplete ? "Complete Payment" : "Cart"}
+            </span>
           </div>
           {userContext.cart.product && userContext.cart.product.length > 0 ? (
             <>
-              <div className="products flex-col">
-                {userContext.cart.product.map((product) => {
-                  return (
-                    <ProductCard
-                      product={defaultProduct}
-                      disabled={isLoading}
-                      cartProduct={product}
-                      isCartProduct={true}
-                    />
-                  );
-                })}
-              </div>
+              {!isCheckoutComplete && (
+                <div className="products flex-col">
+                  {userContext.cart.product.map((product) => {
+                    return (
+                      <ProductCard
+                        product={defaultProduct}
+                        disabled={isLoading}
+                        cartProduct={product}
+                        isCartProduct={true}
+                      />
+                    );
+                  })}
+                </div>
+              )}
               <div className="flex-row align-center width-100 justify-between tag">
                 <span className="text-dark px-12">Cart</span>
                 <span className="text-dark px-15">
@@ -296,37 +300,43 @@ export default function Cart() {
               <br />
               <Divider sx={{ width: "100%" }} />
               <br />
-              <div className="flex-row width-100">
-                <span className="px-13 text-dark fw-500">Address Details</span>
-              </div>
-              <div className="flex-col select-container">
-                <small className="px-12">&nbsp;Region</small>
-                <select
-                  disabled={isLoading}
-                  className="select"
-                  value={shippingLocation}
-                  onChange={(e) => setShippingLocation(e.target.value)}
-                >
-                  {locations.map((location, index) => {
-                    return <option value={location}>{location}</option>;
-                  })}
-                </select>
-              </div>
-              <textarea
-                disabled={isShippingAddressPresent || isLoading}
-                style={{
-                  opacity: isShippingAddressPresent ? 0.5 : 1,
-                }}
-                className="address"
-                name="address"
-                id="address"
-                placeholder="Additional Address Details..."
-                spellCheck={false}
-                value={shippingAddress}
-                onChange={(e) => {
-                  setShippingAddress(e.target.value);
-                }}
-              />
+              {!isCheckoutComplete && (
+                <>
+                  <div className="flex-row width-100">
+                    <span className="px-13 text-dark fw-500">
+                      Address Details
+                    </span>
+                  </div>
+                  <div className="flex-col select-container">
+                    <small className="px-12">&nbsp;Region</small>
+                    <select
+                      disabled={isLoading}
+                      className="select"
+                      value={shippingLocation}
+                      onChange={(e) => setShippingLocation(e.target.value)}
+                    >
+                      {locations.map((location, index) => {
+                        return <option value={location}>{location}</option>;
+                      })}
+                    </select>
+                  </div>
+                  <textarea
+                    disabled={isShippingAddressPresent || isLoading}
+                    style={{
+                      opacity: isShippingAddressPresent ? 0.5 : 1,
+                    }}
+                    className="address"
+                    name="address"
+                    id="address"
+                    placeholder="Additional Address Details..."
+                    spellCheck={false}
+                    value={shippingAddress}
+                    onChange={(e) => {
+                      setShippingAddress(e.target.value);
+                    }}
+                  />
+                </>
+              )}
               {isCheckoutComplete && (
                 <div className="flex-col align-center">
                   <br />
