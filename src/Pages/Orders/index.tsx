@@ -4,26 +4,29 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
+import { Button, MenuItem, TextField, Alert, Modal } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { GridColDef, GridColTypeDef } from "@mui/x-data-grid/models";
 
 import { Order, OrderStatus, PaymentStatus, User } from "../../Lib/Types";
 
-import "./styles.scss";
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
 import { GetOrdersResponse, LoginResponse } from "../../Lib/Responses";
 import MegaLoader from "../../Misc/MegaLoader";
 import { AppContext } from "../DashboardContainer";
-import { DataGrid } from "@mui/x-data-grid";
-import { GridColDef, GridColTypeDef } from "@mui/x-data-grid/models";
-import { Button, MenuItem, TextField, Alert } from "@mui/material";
 import ProgressCircle from "../../Misc/ProgressCircle";
 import { OrderStatuses, PaymentStatuses } from "../../Lib/appConfig";
+
+import "./styles.scss";
 
 export default function Orders() {
   const userContext = useContext(AppContext);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [orders, setOrders] = useState<Order[]>([]);
 
+  const [isShowOrderModal, setShowOrderModal] = useState<boolean>(false);
+  const [currentOrder, setCurrentOrder] = useState<Order>();
   // Order Search Params Begin
   const [orderStatus, setOrderStatus] = useState<OrderStatus>("");
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("");
@@ -120,6 +123,29 @@ export default function Orders() {
         );
       },
     },
+    {
+      field: "reference_code",
+      headerName: "Details",
+      ...tableColProps,
+      renderCell: (param) => {
+        return (
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            sx={{
+              fontSize: "12px",
+            }}
+            onClick={() => {
+              setCurrentOrder(param.row);
+              setShowOrderModal(true);
+            }}
+          >
+            View Details
+          </Button>
+        );
+      },
+    },
   ];
   return (
     <div className="orders-container flex-col width-100">
@@ -202,17 +228,20 @@ export default function Orders() {
                   <Alert severity="info">No orders found!</Alert>
                 </>
               ) : (
-                <DataGrid
-                  loading={isLoading}
-                  className="table"
-                  columns={tableColumns}
-                  rows={orders}
-                  getRowId={(row) => row.reference_code}
-                  paginationModel={paginationModel}
-                  onPaginationModelChange={setPaginationModel}
-                  pageSizeOptions={[5, 10, 25]}
-                  rowCount={rowCount}
-                />
+                <>
+                  <DataGrid
+                    loading={isLoading}
+                    className="table"
+                    columns={tableColumns}
+                    rows={orders}
+                    getRowId={(row) => row.reference_code}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    pageSizeOptions={[5, 10, 25]}
+                    rowCount={rowCount}
+                  />
+                  <Modal></Modal>
+                </>
               )}
             </>
           )}
