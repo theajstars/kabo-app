@@ -37,3 +37,21 @@
 .css-5wly58-MuiDataGrid-root {
   border: none !important;
 }
+
+.order-modal {
+  position: fixed;
+  background-color: $White;
+  width: 600px;
+  height: 600px;
+  overflow: auto;
+  margin-left: -300px;
+  margin-top: -300px;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+  padding: 20px;
+  @media screen and (max-width: 650px) {
+    width: 90vw;
+    margin-left: -45vw;
+  }
+}

@@ -4,7 +4,20 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { useToasts } from "react-toast-notifications";
 import Cookies from "js-cookie";
-import { Button, MenuItem, TextField, Alert, Modal } from "@mui/material";
+import {
+  Button,
+  MenuItem,
+  TextField,
+  Alert,
+  Modal,
+  Table,
+  TableHead,
+  TableCell,
+  TableRow,
+  TableBody,
+  Paper,
+  TableContainer,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { GridColDef, GridColTypeDef } from "@mui/x-data-grid/models";
 
@@ -240,7 +253,128 @@ export default function Orders() {
                     pageSizeOptions={[5, 10, 25]}
                     rowCount={rowCount}
                   />
-                  <Modal></Modal>
+                  <Modal
+                    open={isShowOrderModal}
+                    onClose={() => {
+                      setShowOrderModal(false);
+                    }}
+                  >
+                    <div className="order-modal">
+                      <div className="width-100 flex-row align-center justify-between">
+                        <span className="fw-500 px-15">Order Details</span>
+                        <span
+                          className="pointer fw-500"
+                          onClick={() => {
+                            setShowOrderModal(false);
+                          }}
+                        >
+                          <i className="far fa-times" />
+                        </span>
+                      </div>
+                      <br />
+                      {currentOrder && (
+                        <>
+                          <TableContainer component={Paper}>
+                            <Table aria-label="simple table">
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell>Order Status</TableCell>
+                                  <TableCell>
+                                    <span
+                                      className={
+                                        ["Successful", "Delivered"].includes(
+                                          currentOrder?.order_status
+                                        )
+                                          ? "text-green-primary"
+                                          : [
+                                              "Delivery",
+                                              "Request",
+                                              "Pending",
+                                            ].includes(
+                                              currentOrder?.order_status
+                                            )
+                                          ? "text-blue-default"
+                                          : "text-red-primary"
+                                      }
+                                    >
+                                      {currentOrder?.order_status}
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Payment Status</TableCell>
+                                  <TableCell>
+                                    <span
+                                      className={
+                                        currentOrder.payment_status ===
+                                        "Successful"
+                                          ? "text-green-primary"
+                                          : currentOrder.payment_status ===
+                                            "Pending"
+                                          ? "text-orange-primary"
+                                          : "text-red-primary"
+                                      }
+                                    >
+                                      {currentOrder.payment_status}
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Reference Code</TableCell>
+                                  <TableCell>
+                                    <span>{currentOrder.reference_code}</span>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell>Store</TableCell>
+                                  <TableCell>
+                                    {currentOrder.store.map((s) => {
+                                      return <span>{s.name}&nbsp;&nbsp;</span>;
+                                    })}
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          <br />
+                          <br />
+                          <div className="text-center px-15 fw-500">
+                            Product Details
+                          </div>
+                          <br />
+                          <TableContainer component={Paper}>
+                            <Table aria-label="simple table">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Name</TableCell>
+                                  <TableCell>Quantity</TableCell>
+                                  <TableCell>Amount</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {currentOrder.product.map((product) => {
+                                  return (
+                                    <TableRow>
+                                      <TableCell>
+                                        <span>{product.name}</span>
+                                      </TableCell>
+
+                                      <TableCell>
+                                        <span>{product.quantity}</span>
+                                      </TableCell>
+                                      <TableCell>
+                                        <span>{product.amount}</span>
+                                      </TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </>
+                      )}
+                    </div>
+                  </Modal>
                 </>
               )}
             </>
