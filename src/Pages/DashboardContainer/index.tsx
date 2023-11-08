@@ -269,7 +269,7 @@ export default function DashboardContainer() {
       <Navbar />
       <Routes>
         <Route index path="/" element={<Dashboard />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/orders" element={<Orders />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/saved" element={<SavedItems />} />
         <Route path="/stores" element={<Stores />} />

@@ -41,7 +41,7 @@ export default function Orders() {
       method: "POST",
       data: {
         token: token,
-        account: "panel",
+        account: "customer",
         page: paginationModel.page,
         limit: paginationModel.pageSize,
         payment_status: paymentStatus,
@@ -72,23 +72,12 @@ export default function Orders() {
     {
       field: "name",
       headerName: "Store Name",
-      // ...tableColProps,
-      width: 150,
+      ...tableColProps,
       renderCell: (param) => {
         return <span>{param.row.store[0]?.name ?? ""}</span>;
       },
     },
 
-    {
-      field: "order_timestamp",
-      headerName: "Order Time",
-      ...tableColProps,
-    },
-    {
-      field: "payment_timestamp",
-      headerName: "Payment Time",
-      ...tableColProps,
-    },
     {
       field: "order_status",
       headerName: "Order Status",
@@ -99,7 +88,9 @@ export default function Orders() {
             className={
               ["Successful", "Delivered"].includes(params.row.order_status)
                 ? "text-green-primary"
-                : ["Delivery", "Request"].includes(params.row.order_status)
+                : ["Delivery", "Request", "Pending"].includes(
+                    params.row.order_status
+                  )
                 ? "text-blue-default"
                 : "text-red-primary"
             }

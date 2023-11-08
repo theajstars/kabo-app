@@ -31,7 +31,7 @@ function App() {
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/dashboard" element={<DashboardContainer />}>
             <Route index element={<Dashboard />} />
-            <Route path="/dashboard/products" element={<Products />} />
+            <Route path="/dashboard/orders" element={<Orders />} />
             <Route path="/dashboard/cart" element={<Cart />} />
             <Route path="/dashboard/saved" element={<SavedItems />} />
             <Route path="/dashboard/profile" element={<Profile />} />
