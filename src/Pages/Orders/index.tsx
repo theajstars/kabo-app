@@ -320,11 +320,9 @@ export default function Orders() {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  <TableCell>Time</TableCell>
+                                  <TableCell>Order Time</TableCell>
                                   <TableCell>
-                                    <span>
-                                      {currentOrder.payment_timestamp}
-                                    </span>
+                                    <span>{currentOrder.order_timestamp}</span>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -333,17 +331,7 @@ export default function Orders() {
                                     <span>{currentOrder.reference_code}</span>
                                   </TableCell>
                                 </TableRow>
-                                <TableRow>
-                                  <TableCell>Reference Code</TableCell>
-                                  <TableCell>
-                                    <span>
-                                      {currentOrder.shipping[0].address}
-                                    </span>
-                                    <span>
-                                      {currentOrder.shipping[0].details}
-                                    </span>
-                                  </TableCell>
-                                </TableRow>
+
                                 {/* <TableRow>
                                   <TableCell>Store</TableCell>
                                   <TableCell>
