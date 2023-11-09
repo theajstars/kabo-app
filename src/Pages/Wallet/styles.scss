@@ -209,3 +209,37 @@
     }
   }
 }
+.generate-virtual-account {
+  position: fixed;
+  width: 500px;
+  height: 400px;
+  margin-left: -250px;
+  margin-top: -200px;
+  top: 50%;
+  left: 50%;
+  background-color: $White;
+  padding: 20px;
+  box-sizing: border-box;
+  .input {
+    width: 100%;
+    outline: none;
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid $DarkSecondary;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0 10px;
+    box-sizing: border-box;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    & {
+      width: 90vw;
+      margin-left: -45vw;
+    }
+  }
+}

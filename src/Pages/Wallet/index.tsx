@@ -15,7 +15,14 @@ import {
   Alert,
   Select,
   MenuItem,
+  Modal,
 } from "@mui/material";
+
+import dayjs, { Dayjs } from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { PerformRequest } from "../../Lib/PerformRequest";
 import { Endpoints } from "../../Lib/Endpoints";
@@ -41,7 +48,11 @@ export default function Wallet() {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const { addToast, removeAllToasts } = useToasts();
 
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
+
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isVirtualAccountModalShowing, setVirtualAccountModalShowing] =
+    useState<boolean>(false);
   const [isBankUploading, setBankUploading] = useState<boolean>(false);
 
   const [isEditBankDetails, setEditBankDetails] = useState<boolean>(false);
@@ -55,6 +66,11 @@ export default function Wallet() {
       walletID: "",
     });
 
+  const doesVirtualAccountExist = false;
+  // const doesVirtualAccountExist = userContext?.wallet?.virtual_account
+  //   .virtual_account_no
+  //   ? userContext.wallet.virtual_account.virtual_account_no.length > 0
+  //   : false;
   const getUserBankInformation = (param: "name" | "number") => {
     if (userContext?.user) {
       const { bank_name, account_no } = userContext.user.bank_details;
@@ -101,6 +117,9 @@ export default function Wallet() {
       console.log(r);
       if (r && r.data) {
         const { status } = r.data;
+        if (status === "success") {
+          setEditBankDetails(false);
+        }
         addToast(r.data.message, {
           appearance: status === "success" ? "success" : "error",
         });
@@ -199,44 +218,107 @@ export default function Wallet() {
               justifyContent="space-between"
               spacing={3}
             >
-              <Grid item className="actions-grid-item">
-                <CopyToClipboard
-                  text={
-                    userContext.wallet?.virtual_account.virtual_account_no ??
-                    " "
-                  }
-                  onCopy={() => {
-                    removeAllToasts();
-                    addToast("Account copied to clipboard!", {
-                      appearance: "success",
-                    });
-                  }}
-                >
-                  <div className="flex-col justify-between bank">
-                    <span className="text-darker px-16 fw-500 label">
-                      Virtual Account Details
-                    </span>
-                    <div className="flex-row align-center">
-                      <span className="icon px-20 flex-row align-center justify-center">
-                        <i className="far fa-university" />
+              {doesVirtualAccountExist ? (
+                <Grid item className="actions-grid-item">
+                  <CopyToClipboard
+                    text={
+                      userContext.wallet?.virtual_account.virtual_account_no ??
+                      " "
+                    }
+                    onCopy={() => {
+                      removeAllToasts();
+                      addToast("Account number copied to clipboard!", {
+                        appearance: "success",
+                      });
+                    }}
+                  >
+                    <div className="flex-col justify-between bank">
+                      <span className="text-darker px-16 fw-500 label">
+                        Virtual Account Details
                       </span>
-                      &nbsp; &nbsp;
-                      <span className="name">
+                      <div className="flex-row align-center">
+                        <span className="icon px-20 flex-row align-center justify-center">
+                          <i className="far fa-university" />
+                        </span>
+                        &nbsp; &nbsp;
+                        <span className="name">
+                          {
+                            userContext.wallet?.virtual_account
+                              .virtual_account_bank_name
+                          }
+                        </span>
+                      </div>
+                      <span className="account">
                         {
                           userContext.wallet?.virtual_account
-                            .virtual_account_bank_name
+                            .virtual_account_name
                         }
                       </span>
+                      <span className="number text-blue-default">
+                        {userContext.wallet?.virtual_account.virtual_account_no}
+                      </span>
                     </div>
-                    <span className="account">
-                      {userContext.wallet?.virtual_account.virtual_account_name}
-                    </span>
-                    <span className="number text-blue-default">
-                      {userContext.wallet?.virtual_account.virtual_account_no}
-                    </span>
-                  </div>
-                </CopyToClipboard>
-              </Grid>
+                  </CopyToClipboard>
+                </Grid>
+              ) : (
+                <>
+                  <Modal
+                    open={isVirtualAccountModalShowing}
+                    onClose={() => {
+                      setVirtualAccountModalShowing(false);
+                    }}
+                  >
+                    <div className="generate-virtual-account flex-col">
+                      <div className="flex-row justify-between align-center">
+                        <span className="px-500">Generate Virtual Account</span>
+                        <span
+                          className="pointer px-17"
+                          onClick={() => {
+                            console.log(userContext.user);
+                            setVirtualAccountModalShowing(false);
+                          }}
+                        >
+                          <i className="far fa-times" />
+                        </span>
+                      </div>
+                      <div className="flex-col width-100">
+                        <input
+                          type="number"
+                          spellCheck={false}
+                          className="input"
+                          placeholder="BVN"
+                        />
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DemoContainer components={["DatePicker"]}>
+                            <DatePicker
+                              label="Basic date picker"
+                              value={value}
+                              onChange={(newValue) => setValue(newValue)}
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </div>
+                    </div>
+                  </Modal>
+                  <Grid item className="actions-grid-item">
+                    <div className="flex-col justify-between user-bank">
+                      <span className="text-darker px-16 fw-500 label">
+                        Virtual Account Details
+                      </span>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          setVirtualAccountModalShowing(true);
+                        }}
+                      >
+                        Create Virtual Account
+                      </Button>
+                      <span></span>
+                    </div>
+                  </Grid>
+                </>
+              )}
               <Grid item className="actions-grid-item">
                 <div className="flex-col justify-between transfer">
                   <div className="flex-row align-center">
