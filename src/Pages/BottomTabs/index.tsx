@@ -35,30 +35,32 @@ export default function BottomTabs() {
 
   return (
     <div className="bottom-tabs-container flex-row align-center width-100 justify-between">
-      {/* <Box sx={{ width: "100%" }}> */}
-      <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-        elevation={3}
+      <BottomNavigation
+        value={currentPage}
+        sx={{
+          width: "100%",
+        }}
+        onChange={(event, newValue) => {
+          setCurrentPage(newValue);
+          console.log(newValue);
+        }}
       >
-        <BottomNavigation
-          value={currentPage}
-          onChange={(event, newValue) => {
-            setCurrentPage(newValue);
-            console.log(newValue);
-          }}
-        >
-          {RouteList.map((route) => {
+        {RouteList.map((route) => {
+          if (route.route !== "stores") {
             return (
               <BottomNavigationAction
-                label={route.label}
+                // label={route.label}
+                sx={{
+                  width: "10px",
+                  fontSize: "4px",
+                }}
                 value={route.route}
                 icon={<route.icon />}
               />
             );
-          })}
-        </BottomNavigation>
-      </Paper>
-      {/* </Box> */}
+          }
+        })}
+      </BottomNavigation>
     </div>
   );
 }

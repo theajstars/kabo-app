@@ -5,11 +5,11 @@ import OrdersIcon from "@mui/icons-material/ContentPaste";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
 import WalletIcon from "@mui/icons-material/AccountBalanceWallet";
 const RouteList = [
-  { label: "Stores", route: "stores", icon: StoreIcon },
-  { label: "Saved Items", route: "saved", icon: FavoriteIcon },
+  { label: "Wallet", route: "wallet", icon: WalletIcon },
   { label: "Cart", route: "cart", icon: CartIcon },
+  { label: "Saved Items", route: "saved", icon: FavoriteIcon },
   { label: "Orders", route: "orders", icon: OrdersIcon },
   { label: "My Profile", route: "profile", icon: ProfileIcon },
-  { label: "Wallet", route: "wallet", icon: WalletIcon },
+  { label: "Stores", route: "stores", icon: StoreIcon },
 ];
 export { RouteList };
