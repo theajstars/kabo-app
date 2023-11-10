@@ -185,11 +185,13 @@ export default function Wallet() {
     }
   };
 
+  const [isWalletTransferModalShown, setWalletTransferModalShown] =
+    useState<boolean>(false);
   const PerformWalletTransfer = async () => {
     const { amount, walletID } = walletTransferForm;
     removeAllToasts();
     if (walletID.length === 0) {
-      addToast("Please enter a valid Wallet ID", { appearance: "error" });
+      addToast("Please enter the Wallet ID", { appearance: "error" });
     }
     if (isNaN(parseInt(amount)) || parseInt(amount) < 100) {
       addToast("Minimum transfer amount is ₦100", { appearance: "error" });
@@ -414,6 +416,9 @@ export default function Wallet() {
                       <span className="text-darker px-16 fw-500 label">
                         Virtual Account Details
                       </span>
+                      <span className="px-15 fw-500">
+                        No virtual account found!
+                      </span>
                       <Button
                         variant="contained"
                         color="primary"
@@ -423,7 +428,6 @@ export default function Wallet() {
                       >
                         Create Virtual Account
                       </Button>
-                      <span></span>
                     </div>
                   </Grid>
                 </>
@@ -439,41 +443,76 @@ export default function Wallet() {
                       <i className="far fa-shopping-bag" />
                     </span>
                   </div>
-
-                  <input
-                    type="text"
-                    placeholder="Input Wallet ID"
-                    className="input"
-                    value={walletTransferForm.walletID}
-                    onChange={(e) => {
-                      setWalletTransferForm({
-                        ...walletTransferForm,
-                        walletID: e.target.value,
-                      });
-                    }}
-                  />
-                  <input
-                    type="number"
-                    value={walletTransferForm.amount}
-                    onChange={(e) => {
-                      setWalletTransferForm({
-                        ...walletTransferForm,
-                        amount: e.target.value,
-                      });
-                    }}
-                    placeholder="Enter Amount"
-                    className="input"
-                  />
+                  <span className="px-15 text-white">
+                    Transfer funds from your wallet to another wallet
+                  </span>
                   <button
                     className="pay"
                     onClick={() => {
-                      PerformWalletTransfer();
+                      setWalletTransferModalShown(true);
                     }}
                     disabled={isLoading}
                   >
-                    {isLoading ? <ProgressCircle /> : "Continue"}
+                    Continue
+                    {/* {isLoading ? <ProgressCircle /> : "Continue"} */}
                   </button>
                 </div>
+                <Modal
+                  open={isWalletTransferModalShown}
+                  onClose={() => {
+                    setWalletTransferModalShown(false);
+                  }}
+                >
+                  <div className="wallet-transfer-modal flex-col">
+                    <div className="flex-row justify-between align-center">
+                      <span className="px-500">Transfer from Wallet</span>
+                      <span
+                        className="pointer px-17"
+                        onClick={() => {
+                          setWalletTransferModalShown(false);
+                        }}
+                      >
+                        <i className="far fa-times" />
+                      </span>
+                    </div>
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Input Wallet ID"
+                        className="input"
+                        value={walletTransferForm.walletID}
+                        onChange={(e) => {
+                          setWalletTransferForm({
+                            ...walletTransferForm,
+                            walletID: e.target.value,
+                          });
+                        }}
+                      />
+                      <input
+                        type="number"
+                        value={walletTransferForm.amount}
+                        onChange={(e) => {
+                          setWalletTransferForm({
+                            ...walletTransferForm,
+                            amount: e.target.value,
+                          });
+                        }}
+                        placeholder="Enter Amount"
+                        className="input"
+                      />
+                    </>
+
+                    <button
+                      className="pay"
+                      onClick={() => {
+                        PerformWalletTransfer();
+                      }}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? <ProgressCircle /> : "Continue"}
+                    </button>
+                  </div>
+                </Modal>
               </Grid>
               <Grid item className="actions-grid-item">
                 <div className="flex-col justify-between user-bank">
