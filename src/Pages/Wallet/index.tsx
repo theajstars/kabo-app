@@ -42,17 +42,31 @@ interface WalletTransferForm {
   amount: string;
   walletID: string;
 }
+interface GenerateVirtualAccountForm {
+  bvn: any;
+  firstname: string;
+  lastname: string;
+  dateOfBirth: Dayjs | null;
+}
 export default function Wallet() {
   const navigate = useNavigate();
   const userContext = useContext(AppContext);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const { addToast, removeAllToasts } = useToasts();
 
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-17"));
+  const [value, setValue] = React.useState<Dayjs | null>();
 
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isVirtualAccountModalShowing, setVirtualAccountModalShowing] =
     useState<boolean>(false);
+
+  const [virtualAccountForm, setVirtualAccountForm] =
+    useState<GenerateVirtualAccountForm>({
+      bvn: "",
+      lastname: "",
+      firstname: "",
+      dateOfBirth: dayjs("2022-04-17"),
+    });
   const [isBankUploading, setBankUploading] = useState<boolean>(false);
 
   const [isEditBankDetails, setEditBankDetails] = useState<boolean>(false);
@@ -66,6 +80,50 @@ export default function Wallet() {
       walletID: "",
     });
 
+  const GenerateVirtualAccount = async () => {
+    removeAllToasts();
+    const { bvn, dateOfBirth, firstname, lastname } = virtualAccountForm;
+    if (bvn.toString().length !== 11) {
+      addToast("Please enter a valid BVN", { appearance: "error" });
+    }
+    if (firstname.length === 0 || lastname.length === 0) {
+      addToast("Please enter your full name", { appearance: "error" });
+    }
+    if (
+      bvn.toString().length === 11 &&
+      firstname.length !== 0 &&
+      lastname.length !== 0
+    ) {
+      const dob = `${dateOfBirth?.date()}-${
+        dateOfBirth?.month ? dateOfBirth.month() + 1 : "01"
+      }-${dateOfBirth?.year()}`;
+      const form = {
+        token: Cookies.get("token"),
+        wallet_id: userContext?.wallet?.wallet_id,
+        dob,
+        lastname,
+        firstname,
+      };
+      setVirtualAccountLoading(true);
+      const r: DefaultResponse = await PerformRequest({
+        route: Endpoints.GenerateVirtualAccount,
+        data: form,
+        method: "POST",
+      }).catch(() => {
+        setVirtualAccountLoading(false);
+      });
+      setVirtualAccountLoading(false);
+      const { status, message } = r.data;
+      if (status) {
+        addToast(message, { appearance: "info" });
+      } else {
+        addToast("An error occurred", { appearance: "error" });
+      }
+      console.log(form);
+    }
+  };
+  const [isVirtualAccountLoading, setVirtualAccountLoading] =
+    useState<boolean>(false);
   const doesVirtualAccountExist = false;
   // const doesVirtualAccountExist = userContext?.wallet?.virtual_account
   //   .virtual_account_no
@@ -281,23 +339,74 @@ export default function Wallet() {
                           <i className="far fa-times" />
                         </span>
                       </div>
-                      <div className="flex-col width-100">
+
+                      <div className="flex-row width-100 justify-between">
                         <input
-                          type="number"
+                          type="text"
+                          value={virtualAccountForm.firstname}
+                          onChange={(e) => {
+                            setVirtualAccountForm({
+                              ...virtualAccountForm,
+                              firstname: e.target.value,
+                            });
+                          }}
                           spellCheck={false}
-                          className="input"
-                          placeholder="BVN"
+                          className="input input-half"
+                          placeholder="Enter Firstname..."
                         />
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DemoContainer components={["DatePicker"]}>
-                            <DatePicker
-                              label="Basic date picker"
-                              value={value}
-                              onChange={(newValue) => setValue(newValue)}
-                            />
-                          </DemoContainer>
-                        </LocalizationProvider>
+                        <input
+                          type="text"
+                          value={virtualAccountForm.lastname}
+                          onChange={(e) => {
+                            setVirtualAccountForm({
+                              ...virtualAccountForm,
+                              lastname: e.target.value,
+                            });
+                          }}
+                          spellCheck={false}
+                          className="input input-half"
+                          placeholder="Enter Lastname..."
+                        />
                       </div>
+                      <input
+                        type="number"
+                        value={virtualAccountForm.bvn}
+                        onChange={(e) => {
+                          setVirtualAccountForm({
+                            ...virtualAccountForm,
+                            bvn: e.target.value,
+                          });
+                        }}
+                        spellCheck={false}
+                        className="input"
+                        placeholder="BVN"
+                      />
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={["DatePicker"]}>
+                          <DatePicker
+                            label="Basic date picker"
+                            value={virtualAccountForm.dateOfBirth}
+                            onChange={(e) =>
+                              setVirtualAccountForm({
+                                ...virtualAccountForm,
+                                dateOfBirth: e,
+                              })
+                            }
+                          />
+                        </DemoContainer>
+                      </LocalizationProvider>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        disabled={isVirtualAccountLoading}
+                        onClick={GenerateVirtualAccount}
+                      >
+                        {isVirtualAccountLoading ? (
+                          <ProgressCircle />
+                        ) : (
+                          "Generate Virtual Account"
+                        )}
+                      </Button>
                     </div>
                   </Modal>
                   <Grid item className="actions-grid-item">

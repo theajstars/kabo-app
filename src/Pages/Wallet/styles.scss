@@ -220,6 +220,7 @@
   background-color: $White;
   padding: 20px;
   box-sizing: border-box;
+  justify-content: space-between;
   .input {
     width: 100%;
     outline: none;
@@ -235,6 +236,9 @@
       -webkit-appearance: none;
       margin: 0;
     }
+  }
+  .input-half {
+    width: 48% !important;
   }
   @media screen and (max-width: 600px) {
     & {

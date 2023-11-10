@@ -40,5 +40,6 @@ const Endpoints = {
 
   GetBanks: "/wallet/banks",
   UpdateBankAccount: "/account/update-bank-details",
+  GenerateVirtualAccount: "/wallet/generate-virtual-account",
 };
 export { Endpoints };
