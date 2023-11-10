@@ -40,16 +40,16 @@ export default function BottomTabs() {
         sx={{
           width: "100%",
         }}
-        onChange={(event, newValue) => {
-          setCurrentPage(newValue);
-          console.log(newValue);
+        onChange={(event, route) => {
+          setCurrentPage(route);
+          console.log(route);
+          navigate(`/dashboard/${route}`);
         }}
       >
         {RouteList.map((route) => {
           if (route.route !== "stores") {
             return (
               <BottomNavigationAction
-                // label={route.label}
                 sx={{
                   width: "10px",
                   fontSize: "4px",
