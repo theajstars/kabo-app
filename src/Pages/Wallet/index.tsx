@@ -124,11 +124,11 @@ export default function Wallet() {
   };
   const [isVirtualAccountLoading, setVirtualAccountLoading] =
     useState<boolean>(false);
-  const doesVirtualAccountExist = false;
-  // const doesVirtualAccountExist = userContext?.wallet?.virtual_account
-  //   .virtual_account_no
-  //   ? userContext.wallet.virtual_account.virtual_account_no.length > 0
-  //   : false;
+  // const doesVirtualAccountExist = false;
+  const doesVirtualAccountExist = userContext?.wallet?.virtual_account
+    .virtual_account_no
+    ? userContext.wallet.virtual_account.virtual_account_no.length > 0
+    : false;
   const getUserBankInformation = (param: "name" | "number") => {
     if (userContext?.user) {
       const { bank_name, account_no } = userContext.user.bank_details;

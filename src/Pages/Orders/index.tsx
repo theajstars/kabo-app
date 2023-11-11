@@ -93,6 +93,14 @@ export default function Orders() {
         return <span>{param.row.store[0]?.name ?? ""}</span>;
       },
     },
+    {
+      field: "order_timestamp",
+      headerName: "Date",
+      ...tableColProps,
+      renderCell: (param) => {
+        return <span>{param.row.order_timestamp}</span>;
+      },
+    },
 
     {
       field: "order_status",
